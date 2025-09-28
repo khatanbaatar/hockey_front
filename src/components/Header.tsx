@@ -1,0 +1,157 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { MenuItem } from '@/types';
+
+export default function Header() {
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await fetch('/api/menu');
+        const data = await response.json();
+        
+        if (data.success) {
+          setMenuItems(data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch menu items:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  if (loading) {
+    return (
+      <header className="bg-blue-900 text-white shadow-lg">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="text-xl font-bold">Хоккейн холбоо</div>
+            <div className="animate-pulse">Loading...</div>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
+  return (
+    <header className="bg-blue-900 text-white shadow-lg">
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="text-xl font-bold hover:text-blue-200 transition-colors">
+            Хоккейн холбоо
+          </Link>
+          
+          {/* Mobile menu button */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden p-2 rounded-lg hover:bg-blue-800 transition-colors"
+            aria-label="Toggle menu"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Desktop menu */}
+        <nav className="hidden md:block mt-4">
+          <ul className="flex flex-wrap gap-6">
+            {menuItems.map((item) => (
+              <li key={item.id} className="relative group">
+                <Link
+                  href={`/${item.slug}`}
+                  className="block py-2 px-3 rounded-lg hover:bg-blue-800 transition-colors"
+                >
+                  {item.name}
+                </Link>
+                
+                {/* Dropdown for sub-items */}
+                {item.subItems && item.subItems.length > 0 && (
+                  <ul className="absolute top-full left-0 mt-1 w-64 bg-blue-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    {item.subItems.map((subItem) => (
+                      <li key={subItem.id}>
+                        <Link
+                          href={`/${item.slug}/${subItem.slug}`}
+                          className="block py-3 px-4 hover:bg-blue-700 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                        >
+                          <div className="font-medium">{subItem.name}</div>
+                          {subItem.description && (
+                            <div className="text-sm text-blue-200 mt-1">
+                              {subItem.description}
+                            </div>
+                          )}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <nav className="md:hidden mt-4 bg-blue-800 rounded-lg p-4">
+            <ul className="space-y-2">
+              {menuItems.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    href={`/${item.slug}`}
+                    className="block py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <div className="font-medium">{item.name}</div>
+                    {item.description && (
+                      <div className="text-sm text-blue-200 mt-1">
+                        {item.description}
+                      </div>
+                    )}
+                  </Link>
+                  
+                  {/* Mobile sub-items */}
+                  {item.subItems && item.subItems.length > 0 && (
+                    <ul className="ml-4 mt-2 space-y-1">
+                      {item.subItems.map((subItem) => (
+                        <li key={subItem.id}>
+                          <Link
+                            href={`/${item.slug}/${subItem.slug}`}
+                            className="block py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {subItem.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+      </div>
+    </header>
+  );
+}

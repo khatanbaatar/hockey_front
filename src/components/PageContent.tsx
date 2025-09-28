@@ -1,0 +1,237 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { PageContent as PageContentType } from '@/types';
+import Breadcrumb from './Breadcrumb';
+import LoadingSpinner from './LoadingSpinner';
+
+interface PageContentProps {
+  slug: string;
+}
+
+export default function PageContent({ slug }: PageContentProps) {
+  const [content, setContent] = useState<PageContentType | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPageContent = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch(`/api/pages/${slug}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setContent(data.data);
+        } else {
+          setError(data.message || 'Failed to load page content');
+        }
+      } catch (err) {
+        setError('Failed to load page content');
+        console.error('Error fetching page content:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (slug) {
+      fetchPageContent();
+    }
+  }, [slug]);
+
+  // Generate breadcrumb items based on slug
+  const generateBreadcrumbs = (slug: string) => {
+    const items = [{ label: 'Нүүр', href: '/' }];
+    
+    // Map slug to readable labels
+    const slugLabels: Record<string, string> = {
+      'structure-organization': 'Бүтэц зохион байгуулалт',
+      'infrastructure': 'Дэд бүтэц',
+      'training-seminar': 'Сургалт, семинар',
+      'teams': 'Багууд',
+      'gallery': 'Галерей',
+      'competition-schedule': 'Тэмцээний төлөвлөгөө',
+      'referees': 'Шүүгчид',
+      'rules-regulations': 'Дүрэм журам',
+      'statistics': 'Статистик',
+      'osh': 'ХАБ',
+      'national-team': 'Үндэсний шигшээ баг',
+      'history': 'Түүхэн замнал'
+    };
+
+    // Handle sub-pages
+    if (slug.includes('-')) {
+      const parts = slug.split('-');
+      const mainSlug = parts[0] + '-' + parts[1];
+      const subSlug = parts.slice(2).join('-');
+      
+      if (slugLabels[mainSlug]) {
+        items.push({ label: slugLabels[mainSlug], href: `/${mainSlug}` });
+      }
+      
+      // Add sub-page label
+      const subLabels: Record<string, string> = {
+        'federation-structure': 'Холбооны бүтэц',
+        'positions-roles': 'Албан тушаал, үүрэг',
+        'sports-fields': 'Спортын талбай',
+        'halls': 'Заал',
+        'technical-equipment': 'Техник хэрэгсэл',
+        'provincial-infrastructure': 'Орон нутгийн дэд бүтэц',
+        'coaches': 'Зөвлөгчид',
+        'referees': 'Шүүгчид',
+        'children': 'Хүүхэд',
+        'youth': 'Залуучууд',
+        'clubs': 'Клубууд',
+        'federations': 'Холбоонууд',
+        'education': 'Боловсрол',
+        'international': 'Олон улсын',
+        'clubs-teams-list': 'Баг, клубын жагсаалт',
+        'contact-info': 'Холбоо барих мэдээлэл',
+        'photos': 'Зургууд',
+        'videos': 'Бичлэгүүд',
+        'annual-calendar': 'Жилийн хуанли',
+        'competition-details': 'Тэмцээний дэлгэрэнгүй',
+        'referee-profiles': 'Шүүгчдийн профайл',
+        'referee-qualifications': 'Мэргэжлийн чадвар',
+        'federation-rules': 'Холбооны дүрэм',
+        'hockey-rules': 'Хоккейн дүрэм',
+        'competition-results': 'Тэмцээний үр дүн',
+        'team-player-stats': 'Баг, тоглогчдын статистик',
+        'safety-instructions': 'Аюулгүй ажиллагааны зааварчилгаа',
+        'health-insurance': 'Эрүүл мэнд, даатгал',
+        'national-team-roster': 'Үндэсний шигшээ багийн бүрэлдэхүүн',
+        'participated-competitions': 'Оролцсон тэмцээн',
+        'awards-incentives': 'Шагнал, урамшуулал',
+        'federation-history': 'Холбооны түүх',
+        'timeline': 'Цаг хугацааны дараалал'
+      };
+      
+      if (subLabels[subSlug]) {
+        items.push({ label: subLabels[subSlug] });
+      }
+    } else if (slugLabels[slug]) {
+      items.push({ label: slugLabels[slug] });
+    }
+    
+    return items;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Breadcrumb items={generateBreadcrumbs(slug)} />
+        <div className="container mx-auto px-4 py-8">
+          <LoadingSpinner size="lg" text="Агуулга ачааллаж байна..." />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen">
+        <Breadcrumb items={generateBreadcrumbs(slug)} />
+        <div className="container mx-auto px-4 py-8">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold text-red-800 mb-2">Алдаа гарлаа</h2>
+            <p className="text-red-600">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!content) {
+    return (
+      <div className="min-h-screen">
+        <Breadcrumb items={generateBreadcrumbs(slug)} />
+        <div className="container mx-auto px-4 py-8">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Хуудас олдсонгүй</h2>
+            <p className="text-gray-600">Хүссэн хуудас олдсонгүй.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen">
+      <Breadcrumb items={generateBreadcrumbs(slug)} />
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <header className="mb-8 animate-fade-in">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              {content.title}
+            </h1>
+            <div className="prose prose-lg max-w-none">
+              <p className="text-gray-700 leading-relaxed text-lg">
+                {content.content}
+              </p>
+            </div>
+          </header>
+
+          {content.subSections && content.subSections.length > 0 && (
+            <div className="space-y-6 lg:space-y-8">
+              {content.subSections.map((section, index) => (
+                <section 
+                  key={index} 
+                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8 hover:shadow-md transition-shadow animate-fade-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-4 lg:mb-6">
+                    {section.title}
+                  </h2>
+                  <div className="prose prose-lg max-w-none">
+                    <p className="text-gray-700 leading-relaxed text-base lg:text-lg">
+                      {section.content}
+                    </p>
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+
+          {content.media && content.media.length > 0 && (
+            <div className="mt-8 lg:mt-12 animate-fade-in">
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-6 lg:mb-8">
+                Медиа контент
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                {content.media.map((media, index) => (
+                  <div 
+                    key={index} 
+                    className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    {media.type === 'image' ? (
+                      <img
+                        src={media.url}
+                        alt={media.caption || 'Media content'}
+                        className="w-full h-48 lg:h-56 object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <video
+                        src={media.url}
+                        controls
+                        className="w-full h-48 lg:h-56 object-cover"
+                        preload="metadata"
+                      />
+                    )}
+                    {media.caption && (
+                      <div className="p-4">
+                        <p className="text-sm text-gray-600">{media.caption}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

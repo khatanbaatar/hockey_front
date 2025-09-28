@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Монгол улсын хоккейн холбооны вэб сайт
 
-## Getting Started
+Энэ төсөл нь Next.js, TypeScript, Tailwind CSS ашиглан хийгдсэн Монгол улсын хоккейн холбооны танилцуулга вэб сайт юм.
 
-First, run the development server:
+## Онцлогууд
 
+- **Бүрэн responsive дизайн** - Бүх төхөөрөмж дээр сайн харагддаг
+- **Dynamic menu system** - Цэсүүд серверээс авдаг
+- **Server-side content** - Хуудасны агуулга серверээс авдаг
+- **Mongolian language support** - Монгол хэл дэмжих
+- **Modern UI/UX** - Орчин үеийн хэрэглэгчийн интерфейс
+- **SEO optimized** - Хайлтын системд оновчтой
+- **Fast loading** - Хурдан ачаалах
+
+## Технологи
+
+- **Next.js 15** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Utility-first CSS framework
+- **App Router** - Next.js 13+ routing system
+- **Server Components** - Server-side rendering
+
+## Суулгах заавар
+
+1. Dependencies суулгах:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Development server эхлүүлэх:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Браузераар нээх:
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Цэсний бүтэц
 
-## Learn More
+### Үндсэн цэсүүд:
+1. **Бүтэц зохион байгуулалт** - Холбооны бүтэц, албан тушаал
+2. **Дэд бүтэц** - Спортын талбай, заал, техник хэрэгсэл
+3. **Сургалт, семинар** - 8 дэд ангилал (зөвлөгч, шүүгч, хүүхэд, залуучууд, клуб, холбоо, боловсрол, олон улсын)
+4. **Багууд** - Баг, клубын жагсаалт, холбоо барих мэдээлэл
+5. **Галерей** - Зураг, бичлэгийн цуглуулга
+6. **Тэмцээний төлөвлөгөө** - Жилийн хуанли, тэмцээний дэлгэрэнгүй
+7. **Шүүгчид** - Шүүгчдийн профайл, мэргэжлийн чадвар
+8. **Дүрэм журам** - Холбооны дүрэм, хоккейн дүрэм
+9. **Статистик** - Тэмцээний үр дүн, баг, тоглогчдын статистик
+10. **ХАБ** - Аюулгүй ажиллагааны зааварчилгаа, эрүүл мэнд
+11. **Үндэсний шигшээ баг** - Үндэсний багийн бүрэлдэхүүн, тэмцээн, шагнал
+12. **Түүхэн замнал** - Холбооны түүх, цаг хугацааны дараалал
 
-To learn more about Next.js, take a look at the following resources:
+## API Endpoints
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Menu API
+- `GET /api/menu` - Цэсний мэдээлэл авах
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Page Content API
+- `GET /api/pages/[slug]` - Хуудасны агуулга авах
 
-## Deploy on Vercel
+## Файлын бүтэц
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── menu/
+│   │   │   └── route.ts
+│   │   └── pages/
+│   │       └── [slug]/
+│   │           └── route.ts
+│   ├── [slug]/
+│   │   ├── page.tsx
+│   │   └── [subSlug]/
+│   │       └── page.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── Breadcrumb.tsx
+│   ├── Footer.tsx
+│   ├── Header.tsx
+│   ├── LoadingSpinner.tsx
+│   └── PageContent.tsx
+└── types/
+    └── index.ts
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Хөгжүүлэлт
+
+### Шинэ хуудас нэмэх:
+1. `src/app/api/pages/[slug]/route.ts` файлд шинэ агуулга нэмэх
+2. `src/app/[slug]/page.tsx` файлд static params нэмэх
+3. `src/components/PageContent.tsx` файлд breadcrumb mapping нэмэх
+
+### Цэс нэмэх:
+1. `src/app/api/menu/route.ts` файлд шинэ цэс нэмэх
+2. `src/components/Header.tsx` файлд цэсний харагдах байдлыг тохируулах
+
+## Production build
+
+```bash
+npm run build
+npm start
+```
+
+## Лиценз
+
+MIT License

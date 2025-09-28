@@ -1,0 +1,352 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { PageContent, ApiResponse } from '@/types';
+
+// Mock page content data
+const pageContentData: Record<string, PageContent> = {
+  'structure-organization': {
+    id: '2',
+    title: 'Бүтэц зохион байгуулалт',
+    content: 'Энэ хуудас нь холбооны бүтэц, зохион байгуулалтын талаарх мэдээллийг агуулна.',
+    subSections: [
+      {
+        title: 'Холбооны бүтэц',
+        content: 'Хоккейн холбооны бүтэц, удирдлагын зохион байгуулалт, албан тушаалын бүтэц зэргийг энд харуулна.'
+      },
+      {
+        title: 'Албан тушаал, үүрэг хариуцлага',
+        content: 'Төрөл бүрийн албан тушаалын үүрэг, хариуцлага, эрх хүртээмжийг тодорхойлно.'
+      }
+    ]
+  },
+  'infrastructure': {
+    id: '3',
+    title: 'Дэд бүтэц',
+    content: 'Спортын дэд бүтэц, талбай, заал, техник хэрэгсэл зэргийн мэдээлэл.',
+    subSections: [
+      {
+        title: 'Спортын талбай',
+        content: 'Хоккейн талбай, заал, дасгалын газар зэргийн мэдээлэл.'
+      },
+      {
+        title: 'Техник хэрэгсэл',
+        content: 'Спортын тоног төхөөрөмж, техник хэрэгсэл, засвар үйлчилгээний мэдээлэл.'
+      }
+    ]
+  },
+  'training-seminar': {
+    id: '4',
+    title: 'Сургалт, семинар',
+    content: 'Төрөл бүрийн сургалт, семинарын мэдээлэл, хөтөлбөр.',
+    subSections: [
+      {
+        title: 'Зөвлөгчдийн сургалт',
+        content: 'Зөвлөгчдийн мэргэжлийн хөгжүүлэлт, сургалтын хөтөлбөр.'
+      },
+      {
+        title: 'Шүүгчдийн сургалт',
+        content: 'Шүүгчдийн мэргэжлийн хөгжүүлэлт, гэрчилгээжилт.'
+      },
+      {
+        title: 'Хүүхэд, залуучуудын сургалт',
+        content: 'Хүүхэд, залуучуудын хөгжүүлэлт, сургалтын хөтөлбөр.'
+      }
+    ]
+  },
+  'teams': {
+    id: '5',
+    title: 'Багууд',
+    content: 'Бүх түвшний баг, клубын мэдээлэл.',
+    subSections: [
+      {
+        title: 'Баг, клубын жагсаалт',
+        content: 'Бүртгэлтэй баг, клубын бүрэн жагсаалт.'
+      },
+      {
+        title: 'Холбоо барих мэдээлэл',
+        content: 'Баг, клубын холбоо барих мэдээлэл.'
+      }
+    ]
+  },
+  'gallery': {
+    id: '6',
+    title: 'Зураг болон бичлэгийн галерей',
+    content: 'Зураг, бичлэгийн цуглуулга.',
+    subSections: [
+      {
+        title: 'Зургийн цуглуулга',
+        content: 'Тэмцээн, арга хэмжээний зургууд.'
+      },
+      {
+        title: 'Бичлэгийн цуглуулга',
+        content: 'Тэмцээн, арга хэмжээний бичлэгүүд.'
+      }
+    ]
+  },
+  'competition-schedule': {
+    id: '7',
+    title: 'Тэмцээний төлөвлөгөө',
+    content: 'Тэмцээний хуваарь, цаг, байршлын мэдээлэл.',
+    subSections: [
+      {
+        title: 'Жилийн хуанли',
+        content: 'Жилийн тэмцээний хуанли.'
+      },
+      {
+        title: 'Тэмцээний дэлгэрэнгүй',
+        content: 'Тэмцээний огноо, цаг, байршлын дэлгэрэнгүй мэдээлэл.'
+      }
+    ]
+  },
+  'referees': {
+    id: '8',
+    title: 'Шүүгчид',
+    content: 'Шүүгчдийн мэдээлэл, туршлага, мэргэжлийн чадвар.',
+    subSections: [
+      {
+        title: 'Шүүгчдийн профайл',
+        content: 'Шүүгчдийн хувийн мэдээлэл, туршлага.'
+      },
+      {
+        title: 'Мэргэжлийн чадвар',
+        content: 'Шүүгчдийн мэргэжлийн чадвар, гэрчилгээ.'
+      }
+    ]
+  },
+  'rules-regulations': {
+    id: '9',
+    title: 'Дүрэм журам',
+    content: 'Холбооны дүрэм журам, хоккейн спортын дүрэм.',
+    subSections: [
+      {
+        title: 'Холбооны дүрэм',
+        content: 'Холбооны удирдлагын дүрэм журам.'
+      },
+      {
+        title: 'Хоккейн дүрэм',
+        content: 'Хоккейн спортын албан ёсны дүрэм.'
+      }
+    ]
+  },
+  'statistics': {
+    id: '10',
+    title: 'Статистик',
+    content: 'Тэмцээний үр дүн, баг, тоглогчдын статистик.',
+    subSections: [
+      {
+        title: 'Тэмцээний үр дүн',
+        content: 'Тэмцээний үр дүн, байрлал.'
+      },
+      {
+        title: 'Баг, тоглогчдын статистик',
+        content: 'Баг, тоглогчдын дэлгэрэнгүй статистик.'
+      }
+    ]
+  },
+  'osh': {
+    id: '11',
+    title: 'ХАБ (Хөдөлмөрийн аюулгүй байдал)',
+    content: 'Аюулгүй ажиллагааны зааварчилгаа, эрүүл мэндийн мэдээлэл.',
+    subSections: [
+      {
+        title: 'Аюулгүй ажиллагааны зааварчилгаа',
+        content: 'Спортын үйл ажиллагааны аюулгүй байдлын зааварчилгаа.'
+      },
+      {
+        title: 'Эрүүл мэнд, даатгалын мэдээлэл',
+        content: 'Тоглогчдын эрүүл мэнд, даатгалын мэдээлэл.'
+      }
+    ]
+  },
+  'national-team': {
+    id: '12',
+    title: 'Үндэсний шигшээ баг',
+    content: 'Үндэсний шигшээ багийн мэдээлэл, оролцсон тэмцээн, шагнал.',
+    subSections: [
+      {
+        title: 'Үндэсний шигшээ багийн бүрэлдэхүүн',
+        content: 'Одоогийн үндэсний шигшээ багийн тоглогчид.'
+      },
+      {
+        title: 'Оролцсон тэмцээн',
+        content: 'Үндэсний шигшээ багийн оролцсон тэмцээнүүд.'
+      },
+      {
+        title: 'Шагнал, урамшуулал',
+        content: 'Үндэсний шигшээ багийн шагнал, амжилт.'
+      }
+    ]
+  },
+  'history': {
+    id: '13',
+    title: 'Түүхэн замнал',
+    content: 'Холбооны түүхэн замнал, цаг хугацааны дараалал.',
+    subSections: [
+      {
+        title: 'Холбооны түүх',
+        content: 'Хоккейн холбооны түүхэн хөгжил.'
+      },
+      {
+        title: 'Цаг хугацааны дараалал',
+        content: 'Холбооны чухал үйл явдлын цаг хугацааны дараалал.'
+      }
+    ]
+  },
+  // Sub-page content
+  'structure-organization-federation-structure': {
+    id: '2-1',
+    title: 'Federation structure',
+    content: 'Холбооны бүтэц, удирдлагын зохион байгуулалт, албан тушаалын бүтэц зэргийг энд харуулна.',
+    subSections: [
+      {
+        title: 'Удирдлагын бүтэц',
+        content: 'Холбооны удирдлагын бүтэц, албан тушаалын бүтэц.'
+      },
+      {
+        title: 'Албан тушаалын бүтэц',
+        content: 'Төрөл бүрийн албан тушаалын үүрэг, хариуцлага.'
+      }
+    ]
+  },
+  'structure-organization-positions-roles': {
+    id: '2-2',
+    title: 'Positions, roles and responsibilities',
+    content: 'Төрөл бүрийн албан тушаалын үүрэг, хариуцлага, эрх хүртээмжийг тодорхойлно.',
+    subSections: [
+      {
+        title: 'Удирдлагын албан тушаал',
+        content: 'Ерөнхийлөгч, дэд ерөнхийлөгч, нарийн бичгийн дарга зэргийн үүрэг.'
+      },
+      {
+        title: 'Техникийн албан тушаал',
+        content: 'Техникийн дарга, зөвлөгч, шүүгчдийн үүрэг.'
+      }
+    ]
+  },
+  'training-seminar-coaches': {
+    id: '4-1',
+    title: 'Coaches',
+    content: 'Зөвлөгчдийн мэргэжлийн хөгжүүлэлт, сургалтын хөтөлбөр.',
+    subSections: [
+      {
+        title: 'Мэргэжлийн сургалт',
+        content: 'Зөвлөгчдийн мэргэжлийн хөгжүүлэлтийн сургалт.'
+      },
+      {
+        title: 'Гэрчилгээжилт',
+        content: 'Зөвлөгчдийн гэрчилгээжилтийн хөтөлбөр.'
+      }
+    ]
+  },
+  'teams-clubs-teams-list': {
+    id: '5-1',
+    title: 'List of clubs, teams',
+    content: 'Бүртгэлтэй баг, клубын бүрэн жагсаалт.',
+    subSections: [
+      {
+        title: 'Үндэсний лиг',
+        content: 'Үндэсний лигийн багууд.'
+      },
+      {
+        title: 'Орон нутгийн лиг',
+        content: 'Орон нутгийн лигийн багууд.'
+      }
+    ]
+  },
+  'gallery-photos': {
+    id: '6-1',
+    title: 'Photos',
+    content: 'Тэмцээн, арга хэмжээний зургууд.',
+    subSections: [
+      {
+        title: 'Тэмцээний зургууд',
+        content: 'Төрөл бүрийн тэмцээний зургууд.'
+      },
+      {
+        title: 'Арга хэмжээний зургууд',
+        content: 'Холбооны арга хэмжээний зургууд.'
+      }
+    ]
+  },
+  'competition-schedule-annual-calendar': {
+    id: '7-1',
+    title: 'Annual calendar',
+    content: 'Жилийн тэмцээний хуанли.',
+    subSections: [
+      {
+        title: '2024 оны хуанли',
+        content: '2024 оны тэмцээний хуанли.'
+      },
+      {
+        title: '2025 оны хуанли',
+        content: '2025 оны тэмцээний хуанли.'
+      }
+    ]
+  },
+  'statistics-competition-results': {
+    id: '10-1',
+    title: 'Competition results',
+    content: 'Тэмцээний үр дүн, байрлал.',
+    subSections: [
+      {
+        title: 'Үндэсний лигийн үр дүн',
+        content: 'Үндэсний лигийн үр дүн, байрлал.'
+      },
+      {
+        title: 'Олон улсын тэмцээний үр дүн',
+        content: 'Олон улсын тэмцээний үр дүн.'
+      }
+    ]
+  },
+  'national-team-national-team-roster': {
+    id: '12-1',
+    title: 'National team roster',
+    content: 'Одоогийн үндэсний шигшээ багийн тоглогчид.',
+    subSections: [
+      {
+        title: 'Эрэгтэйчүүдийн баг',
+        content: 'Эрэгтэйчүүдийн үндэсний шигшээ багийн бүрэлдэхүүн.'
+      },
+      {
+        title: 'Эмэгтэйчүүдийн баг',
+        content: 'Эмэгтэйчүүдийн үндэсний шигшээ багийн бүрэлдэхүүн.'
+      }
+    ]
+  }
+};
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    const { slug } = params;
+    
+    const pageContent = pageContentData[slug];
+    
+    if (!pageContent) {
+      const response: ApiResponse<null> = {
+        success: false,
+        data: null,
+        message: 'Page not found'
+      };
+      
+      return NextResponse.json(response, { status: 404 });
+    }
+    
+    const response: ApiResponse<PageContent> = {
+      success: true,
+      data: pageContent,
+      message: 'Page content retrieved successfully'
+    };
+    
+    return NextResponse.json(response);
+  } catch (error) {
+    const response: ApiResponse<null> = {
+      success: false,
+      data: null,
+      message: 'Failed to retrieve page content'
+    };
+    
+    return NextResponse.json(response, { status: 500 });
+  }
+}
