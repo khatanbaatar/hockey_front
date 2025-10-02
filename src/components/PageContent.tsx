@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { PageContent as PageContentType } from '@/types';
 import Breadcrumb from './Breadcrumb';
 import LoadingSpinner from './LoadingSpinner';
@@ -47,6 +48,7 @@ export default function PageContent({ slug }: PageContentProps) {
     
     // Map slug to readable labels
     const slugLabels: Record<string, string> = {
+      'about-us': 'Бидний тухай',
       'structure-organization': 'Бүтэц зохион байгуулалт',
       'infrastructure': 'Дэд бүтэц',
       'training-seminar': 'Сургалт, семинар',
@@ -73,6 +75,9 @@ export default function PageContent({ slug }: PageContentProps) {
       
       // Add sub-page label
       const subLabels: Record<string, string> = {
+        'president': 'Ерөнхийлөгч',
+        'leadership-team': 'Удирдлагын баг',
+        'federation-info': 'Холбооны тухай',
         'federation-structure': 'Холбооны бүтэц',
         'positions-roles': 'Албан тушаал, үүрэг',
         'sports-fields': 'Спортын талбай',
@@ -151,6 +156,75 @@ export default function PageContent({ slug }: PageContentProps) {
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Хуудас олдсонгүй</h2>
             <p className="text-gray-600">Хүссэн хуудас олдсонгүй.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Special layout for president page
+  if (slug === 'about-us-president') {
+    return (
+      <div className="min-h-screen">
+        <Breadcrumb items={generateBreadcrumbs(slug)} />
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {/* Left side - Image */}
+              <div className="flex justify-center lg:justify-end">
+                <div className="relative w-full max-w-md">
+                  <Image
+                    src="/assets/president.jpeg"
+                    alt="PRESIDENT OF MIHF JAVKHLAN BOLD"
+                    width={500}
+                    height={700}
+                    className="w-full h-auto rounded-lg shadow-lg"
+                    priority
+                  />
+                </div>
+              </div>
+              
+              {/* Right side - Content */}
+              <div className="space-y-6">
+                <header className="animate-fade-in">
+                  <h1 className="text-2xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
+                    {content.title}
+                  </h1>
+                  <div className="prose prose-lg max-w-none">
+                    <p className="text-gray-700 leading-relaxed text-base lg:text-sm">
+                      {content.content}
+                    </p>
+                  </div>
+                </header>
+
+                {content.subSections && content.subSections.length > 0 && (
+                  <div className="space-y-6">
+                    {content.subSections.map((section, index) => (
+                      <section 
+                        key={index} 
+                        className="animate-fade-in"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        {section.title !== 'Гарын үсэг' && (
+                          <div className="prose prose-lg max-w-none mb-4">
+                            <p className="text-gray-700 leading-relaxed text-base lg:text-lg">
+                              {section.content}
+                            </p>
+                          </div>
+                        )}
+                        {section.title === 'Гарын үсэг' && (
+                          <div className="mt-8 pt-6 border-t border-gray-200">
+                            <p className="text-gray-800 font-medium text-lg italic">
+                              {section.content}
+                            </p>
+                          </div>
+                        )}
+                      </section>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

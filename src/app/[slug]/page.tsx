@@ -1,18 +1,20 @@
 import PageContent from '@/components/PageContent';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function Page({ params }: PageProps) {
-  return <PageContent slug={params.slug} />;
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params;
+  return <PageContent slug={slug} />;
 }
 
 export async function generateStaticParams() {
   // Generate static params for all menu items
   const menuItems = [
+    'about-us',
     'structure-organization',
     'infrastructure', 
     'training-seminar',

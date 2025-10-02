@@ -5,10 +5,29 @@ import { MenuItem, ApiResponse } from '@/types';
 const menuData: MenuItem[] = [
   {
     id: '1',
-    name: 'Нэмэлтээ хийгдэх меню',
-    slug: 'additional-menu',
-    description: 'Extension of the main menu',
-    subItems: []
+    name: 'Бидний тухай',
+    slug: 'about-us',
+    description: 'About Mongolian Hockey Federation',
+    subItems: [
+      {
+        id: '1-1',
+        name: 'Ерөнхийлөгч',
+        slug: 'president',
+        description: 'President of MIHF'
+      },
+      {
+        id: '1-2',
+        name: 'Удирдлагын баг',
+        slug: 'leadership-team',
+        description: 'Leadership team members'
+      },
+      {
+        id: '1-3',
+        name: 'Холбооны тухай',
+        slug: 'federation-info',
+        description: 'About the federation'
+      }
+    ]
   },
   {
     id: '2',
