@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { PageContent as PageContentType } from '@/types';
 import Breadcrumb from './Breadcrumb';
 import LoadingSpinner from './LoadingSpinner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PageContentProps {
   slug: string;
@@ -14,6 +15,7 @@ export default function PageContent({ slug }: PageContentProps) {
   const [content, setContent] = useState<PageContentType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const fetchPageContent = async () => {
@@ -21,7 +23,7 @@ export default function PageContent({ slug }: PageContentProps) {
         setLoading(true);
         setError(null);
         
-        const response = await fetch(`/api/pages/${slug}`);
+        const response = await fetch(`/api/pages/${slug}?language=${language}`);
         const data = await response.json();
         
         if (data.success) {
@@ -40,27 +42,27 @@ export default function PageContent({ slug }: PageContentProps) {
     if (slug) {
       fetchPageContent();
     }
-  }, [slug]);
+  }, [slug, language]);
 
   // Generate breadcrumb items based on slug
-  const generateBreadcrumbs = (slug: string) => {
-    const items = [{ label: 'Нүүр', href: '/' }];
+  const generateBreadcrumbs = (slug: string): Array<{ label: string; href?: string }> => {
+    const items: Array<{ label: string; href?: string }> = [{ label: t('nav.home'), href: '/' }];
     
     // Map slug to readable labels
     const slugLabels: Record<string, string> = {
-      'about-us': 'Бидний тухай',
-      'structure-organization': 'Бүтэц зохион байгуулалт',
-      'infrastructure': 'Дэд бүтэц',
-      'training-seminar': 'Сургалт, семинар',
-      'teams': 'Багууд',
-      'gallery': 'Галерей',
-      'competition-schedule': 'Тэмцээний төлөвлөгөө',
-      'referees': 'Шүүгчид',
-      'rules-regulations': 'Дүрэм журам',
-      'statistics': 'Статистик',
-      'osh': 'ХАБ',
-      'national-team': 'Үндэсний шигшээ баг',
-      'history': 'Түүхэн замнал'
+      'about-us': t('nav.about'),
+      'structure-organization': t('nav.structure'),
+      'infrastructure': t('nav.infrastructure'),
+      'training-seminar': t('nav.training'),
+      'teams': t('nav.teams'),
+      'gallery': t('nav.gallery'),
+      'competition-schedule': t('nav.schedule'),
+      'referees': t('nav.referees'),
+      'rules-regulations': t('nav.rules'),
+      'statistics': t('nav.statistics'),
+      'osh': t('nav.osh'),
+      'national-team': t('nav.national-team'),
+      'history': t('nav.history')
     };
 
     // Handle sub-pages
@@ -128,7 +130,7 @@ export default function PageContent({ slug }: PageContentProps) {
       <div className="min-h-screen">
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
-          <LoadingSpinner size="lg" text="Агуулга ачааллаж байна..." />
+          <LoadingSpinner size="lg" text={t('common.loading')} />
         </div>
       </div>
     );
@@ -140,7 +142,7 @@ export default function PageContent({ slug }: PageContentProps) {
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <h2 className="text-xl font-semibold text-red-800 mb-2">Алдаа гарлаа</h2>
+            <h2 className="text-xl font-semibold text-red-800 mb-2">{t('common.error')}</h2>
             <p className="text-red-600">{error}</p>
           </div>
         </div>
@@ -154,8 +156,8 @@ export default function PageContent({ slug }: PageContentProps) {
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Хуудас олдсонгүй</h2>
-            <p className="text-gray-600">Хүссэн хуудас олдсонгүй.</p>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">{t('common.not-found')}</h2>
+            <p className="text-gray-600">{t('common.page-not-found')}</p>
           </div>
         </div>
       </div>
@@ -183,7 +185,7 @@ export default function PageContent({ slug }: PageContentProps) {
             {content.media && content.media.length > 0 && (
               <div className="animate-fade-in">
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-6 lg:mb-8">
-                  Медиа контент
+                  {t('common.media-content')}
                 </h2>
                 {/* 4x4 Grid Layout */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">

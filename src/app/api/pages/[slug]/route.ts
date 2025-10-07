@@ -270,7 +270,11 @@ const pageContentData: Record<string, PageContent> = {
   'gallery-photos': {
     id: '6-1',
     title: 'Photos',
+    titleMn: 'Photos',
+    titleEn: 'Photos',
     content: 'Тэмцээн, арга хэмжээний зургууд.',
+    contentMn: 'Тэмцээн, арга хэмжээний зургууд.',
+    contentEn: 'Competition and event photos.',
     media: [
       {
         type: 'image' as const,
@@ -357,7 +361,11 @@ const pageContentData: Record<string, PageContent> = {
   'gallery-videos': {
     id: '6-2',
     title: 'Videos',
+    titleMn: 'Videos',
+    titleEn: 'Videos',
     content: 'Тэмцээн, арга хэмжээний бичлэгүүд.',
+    contentMn: 'Тэмцээн, арга хэмжээний бичлэгүүд.',
+    contentEn: 'Competition and event videos.',
     media: [
       {
         type: 'video' as const,
@@ -544,6 +552,8 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
+    const { searchParams } = new URL(request.url);
+    const language = searchParams.get('language') || 'mn';
     
     const pageContent = pageContentData[slug];
     
@@ -557,9 +567,16 @@ export async function GET(
       return NextResponse.json(response, { status: 404 });
     }
     
+    // Filter content based on language
+    const filteredContent = {
+      ...pageContent,
+      title: language === 'en' ? pageContent.titleEn || pageContent.title : pageContent.titleMn || pageContent.title,
+      content: language === 'en' ? pageContent.contentEn || pageContent.content : pageContent.contentMn || pageContent.content,
+    };
+    
     const response: ApiResponse<PageContent> = {
       success: true,
-      data: pageContent,
+      data: filteredContent,
       message: 'Page content retrieved successfully'
     };
     

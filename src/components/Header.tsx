@@ -3,16 +3,19 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { MenuItem } from '@/types';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch('/api/menu');
+        const response = await fetch(`/api/menu?language=${language}`);
         const data = await response.json();
         
         if (data.success) {
@@ -26,7 +29,7 @@ export default function Header() {
     };
 
     fetchMenuItems();
-  }, []);
+  }, [language]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -50,8 +53,13 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-xl font-bold hover:text-blue-200 transition-colors">
-            Хоккейн холбоо
+            {language === 'mn' ? 'Хоккейн холбоо' : 'Hockey Federation'}
           </Link>
+          
+          {/* Language Switcher - Desktop */}
+          <div className="hidden md:block">
+            <LanguageSwitcher />
+          </div>
           
           {/* Mobile menu button */}
           <button
@@ -162,6 +170,11 @@ export default function Header() {
         {/* Mobile menu */}
         {isMenuOpen && (
           <nav className="md:hidden mt-4 bg-blue-800 rounded-lg p-4">
+            {/* Language Switcher - Mobile */}
+            <div className="mb-4 pb-4 border-b border-blue-700">
+              <LanguageSwitcher />
+            </div>
+            
             <ul className="space-y-2">
               {menuItems.map((item) => (
                 <li key={item.id}>
