@@ -272,7 +272,7 @@ export default function Home() {
                 ];
                 
                 return (
-                  <Link key={item.id} href="/news" className="block">
+                  <Link key={item.id} href={`/news/${item.id}`} className="block">
                     <article className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
                       <div className={`h-48 ${colors[index % 3].bg} flex items-center justify-center`}>
                         <div className={colors[index % 3].icon}>

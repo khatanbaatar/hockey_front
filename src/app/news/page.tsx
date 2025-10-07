@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Breadcrumb from '@/components/Breadcrumb';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import Link from 'next/link';
 
 interface NewsItem {
   id: string;
@@ -166,10 +167,10 @@ export default function NewsPage() {
           {/* News Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {currentNewsItems.map((item) => (
-              <article 
-                key={item.id} 
-                className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              >
+              <Link key={item.id} href={`/news/${item.id}`} className="block">
+                <article 
+                  className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                >
                 {/* Category Badge */}
                 <div className="px-6 pt-6 pb-2">
                   <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
@@ -195,7 +196,8 @@ export default function NewsPage() {
                     {new Date(item.date).toLocaleDateString(language === 'mn' ? 'mn-MN' : 'en-US')}
                   </div>
                 </div>
-              </article>
+                </article>
+              </Link>
             ))}
           </div>
 
