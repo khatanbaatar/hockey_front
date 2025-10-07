@@ -39,6 +39,7 @@ const translations = {
     'nav.president': 'Ерөнхийлөгч',
     'nav.leadership': 'Удирдлагын баг',
     'nav.federation-info': 'Холбооны тухай',
+    'nav.news': 'Мэдээ мэдээлэл',
     
     // Common
     'common.loading': 'Ачааллаж байна...',
@@ -112,6 +113,7 @@ const translations = {
     'nav.president': 'President',
     'nav.leadership': 'Leadership Team',
     'nav.federation-info': 'About Federation',
+    'nav.news': 'News & Information',
     
     // Common
     'common.loading': 'Loading...',

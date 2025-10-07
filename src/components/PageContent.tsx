@@ -325,8 +325,8 @@ export default function PageContent({ slug }: PageContentProps) {
                         )}
                         {section.title === (language === 'mn' ? 'Гарын үсэг' : 'Signature') && (
                           <div className="mt-8 pt-6 border-t border-gray-200">
-                            <div className="flex flex-col items-end space-y-4">
-                              <p className="text-gray-800 font-medium text-lg italic text-right">
+                            <div className="flex items-center justify-center space-x-6">
+                              <p className="text-gray-800 font-medium text-lg italic">
                                 {section.content}
                               </p>
                               <div className="relative">
