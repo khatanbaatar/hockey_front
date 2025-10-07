@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { MenuItem } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -12,6 +13,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const { language, t } = useLanguage();
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -35,6 +37,20 @@ export default function Header() {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Check if menu item is active
+  const isActive = (item: MenuItem) => {
+    const currentPath = pathname.replace(/\/$/, ''); // Remove trailing slash
+    const itemPath = `/${item.slug}`;
+    
+    // Check if current path matches the menu item path
+    if (currentPath === itemPath) return true;
+    
+    // Check if current path starts with the menu item path (for sub-pages)
+    if (currentPath.startsWith(itemPath + '/')) return true;
+    
+    return false;
   };
 
   if (loading) {
@@ -108,13 +124,24 @@ export default function Header() {
             {menuItems.map((item) => (
               <li key={item.id} className="relative group">
                 {item.subItems && item.subItems.length > 0 ? (
-                  <span className="block py-2 px-3 rounded-lg hover:bg-blue-800 transition-colors cursor-pointer">
+                  <span className={`block py-2 px-3 rounded-lg transition-colors cursor-pointer ${
+                    isActive(item) 
+                      ? 'bg-blue-600 text-white' 
+                      : 'hover:bg-blue-800 text-blue-100 hover:text-white'
+                  }`}>
                     {item.name}
+                    <svg className="inline-block ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </span>
                 ) : (
                   <Link
                     href={`/${item.slug}`}
-                    className="block py-2 px-3 rounded-lg hover:bg-blue-800 transition-colors"
+                    className={`block py-2 px-3 rounded-lg transition-colors ${
+                      isActive(item)
+                        ? 'bg-blue-600 text-white'
+                        : 'hover:bg-blue-800 text-white hover:text-blue-100'
+                    }`}
                   >
                     {item.name}
                   </Link>
@@ -205,8 +232,19 @@ export default function Header() {
               {menuItems.map((item) => (
                 <li key={item.id}>
                   {item.subItems && item.subItems.length > 0 ? (
-                    <div className="block py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
-                      <div className="font-medium">{item.name}</div>
+                    <div className={`block py-3 px-4 rounded-lg transition-colors cursor-pointer ${
+                      isActive(item)
+                        ? 'bg-blue-600'
+                        : 'bg-blue-700 hover:bg-blue-600'
+                    }`}>
+                      <div className={`font-semibold flex items-center ${
+                        isActive(item) ? 'text-white' : 'text-blue-100'
+                      }`}>
+                        {item.name}
+                        <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
                       {item.description && (
                         <div className="text-sm text-blue-200 mt-1">
                           {item.description}
@@ -216,10 +254,16 @@ export default function Header() {
                   ) : (
                     <Link
                       href={`/${item.slug}`}
-                      className="block py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                      className={`block py-3 px-4 rounded-lg transition-colors ${
+                        isActive(item)
+                          ? 'bg-blue-600'
+                          : 'hover:bg-blue-700'
+                      }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <div className="font-medium">{item.name}</div>
+                      <div className={`font-medium ${
+                        isActive(item) ? 'text-white' : 'text-white'
+                      }`}>{item.name}</div>
                       {item.description && (
                         <div className="text-sm text-blue-200 mt-1">
                           {item.description}
