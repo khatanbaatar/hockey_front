@@ -24,115 +24,39 @@ export default function NewsPage() {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    // Mock news data - replace with actual API call
-    const mockNewsData: NewsItem[] = [
-      {
-        id: '1',
-        title: language === 'mn' 
-          ? 'Монголын хоккейн холбооны шинэ төлөвлөгөө' 
-          : 'New Plans for Mongolian Hockey Federation',
-        content: language === 'mn'
-          ? 'Монголын хоккейн холбоо ирэх жилүүдэд хоккейн спортыг хөгжүүлэх шинэ төлөвлөгөө боловсруулжээ. Энэ төлөвлөгөөнд залуучуудын хөгжүүлэлт, мэргэжлийн сургалт, олон улсын тэмцээнд оролцоо зэрэг чухал асуудлуудыг багтаасан байна.'
-          : 'The Mongolian Hockey Federation has developed new plans to develop hockey sports in the coming years. This plan includes important issues such as youth development, professional training, and participation in international competitions.',
-        date: '2024-01-15',
-        category: language === 'mn' ? 'Төлөвлөгөө' : 'Planning'
-      },
-      {
-        id: '2',
-        title: language === 'mn'
-          ? 'Үндэсний шигшээ багийн бэлтгэл эхэлжээ'
-          : 'National Team Training Begins',
-        content: language === 'mn'
-          ? 'Монголын үндэсний хоккейн шигшээ баг олон улсын тэмцээнд бэлтгэх зорилгоор эрчимтэй бэлтгэл эхлүүлжээ. Багийн бүрэлдэхүүнд шинэ тоглогчид нэмэгдэж, мэргэжлийн зөвлөгчдийн удирдлага дор сургалт явуулж байна.'
-          : 'The Mongolian national hockey team has begun intensive training to prepare for international competitions. New players have been added to the team roster, and training is being conducted under the guidance of professional coaches.',
-        date: '2024-01-10',
-        category: language === 'mn' ? 'Тэмцээн' : 'Competition'
-      },
-      {
-        id: '3',
-        title: language === 'mn'
-          ? 'Хоккейн талбай шинэчлэгдэж байна'
-          : 'Hockey Rink Being Renovated',
-        content: language === 'mn'
-          ? 'Улаанбаатар хотын төвд байрлах хоккейн талбайг орчин үеийн стандартад нийцүүлэн шинэчлэх ажил эхэлжээ. Шинэчлэлтэд мөсний систем, гэрэлтүүлэг, харааны систем зэрэг орно.'
-          : 'The hockey rink located in the center of Ulaanbaatar has begun renovation work to meet modern standards. The renovation includes ice system, lighting, and sound system.',
-        date: '2024-01-05',
-        category: language === 'mn' ? 'Дэд бүтэц' : 'Infrastructure'
-      },
-      {
-        id: '4',
-        title: language === 'mn'
-          ? 'Залуучуудын хоккейн сургалт эхэлжээ'
-          : 'Youth Hockey Training Begins',
-        content: language === 'mn'
-          ? 'Монголын хоккейн холбоо залуучуудын хөгжүүлэлтийн хөтөлбөр эхлүүлжээ. 8-16 насны хүүхдүүдэд зориулсан сургалт долоо хоногт 3 удаа явуулж байна.'
-          : 'The Mongolian Hockey Federation has launched a youth development program. Training for children aged 8-16 is conducted 3 times a week.',
-        date: '2024-01-20',
-        category: language === 'mn' ? 'Сургалт' : 'Training'
-      },
-      {
-        id: '5',
-        title: language === 'mn'
-          ? 'Олон улсын тэмцээнд оролцоо'
-          : 'Participation in International Competition',
-        content: language === 'mn'
-          ? 'Монголын үндэсний шигшээ баг Азийн хоккейн аварга шалгаруулах тэмцээнд оролцох бэлтгэл хийж байна. Тэмцээн 3-р сард Японд зохион байгуулагдана.'
-          : 'The Mongolian national team is preparing to participate in the Asian Hockey Championship. The competition will be held in Japan in March.',
-        date: '2024-01-25',
-        category: language === 'mn' ? 'Тэмцээн' : 'Competition'
-      },
-      {
-        id: '6',
-        title: language === 'mn'
-          ? 'Шинэ тоног төхөөрөмж авч ирэв'
-          : 'New Equipment Arrived',
-        content: language === 'mn'
-          ? 'Хоккейн талбайд шинэ тоног төхөөрөмж, хамгаалалтын хэрэгсэл, цохиур зэрэг авч ирэв. Энэ нь тамирчдын аюулгүй байдал, гүйцэтгэлийг сайжруулахад тусална.'
-          : 'New equipment, protective gear, and sticks have arrived at the hockey rink. This will help improve the safety and performance of athletes.',
-        date: '2024-01-30',
-        category: language === 'mn' ? 'Тоног төхөөрөмж' : 'Equipment'
-      },
-      {
-        id: '7',
-        title: language === 'mn'
-          ? 'Зөвлөгчдийн сургалт зохион байгуулав'
-          : 'Coaches Training Organized',
-        content: language === 'mn'
-          ? 'Монголын хоккейн холбоо зөвлөгчдийн мэргэжлийн хөгжүүлэлтийн сургалт зохион байгуулжээ. Сургалтад 20 гаруй зөвлөгч оролцож байна.'
-          : 'The Mongolian Hockey Federation has organized professional development training for coaches. More than 20 coaches are participating in the training.',
-        date: '2024-02-01',
-        category: language === 'mn' ? 'Сургалт' : 'Training'
-      },
-      {
-        id: '8',
-        title: language === 'mn'
-          ? 'Хоккейн дүрмийн шинэчлэл'
-          : 'Hockey Rules Update',
-        content: language === 'mn'
-          ? 'Олон улсын хоккейн холбоо дүрмийн шинэчлэл гаргажээ. Шинэ дүрэм нь тоглолтын хурд, аюулгүй байдлыг сайжруулахад чиглэгдсэн байна.'
-          : 'The International Hockey Federation has released rule updates. The new rules are aimed at improving game speed and safety.',
-        date: '2024-02-05',
-        category: language === 'mn' ? 'Дүрэм' : 'Rules'
+    const fetchNews = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const api = "https://hockey.onol.tech";
+        
+        const response = await fetch(api+`/api/news?language=${language}&page=${currentPage}&limit=${itemsPerPage}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setNewsItems(data.data);
+          setTotalPages(data.pagination.totalPages);
+        } else {
+          setError(data.message || 'Failed to load news');
+        }
+      } catch (err) {
+        setError('Failed to load news');
+        console.error('Error fetching news:', err);
+      } finally {
+        setLoading(false);
       }
-    ];
+    };
 
-    // Simulate API call
-    setTimeout(() => {
-      setNewsItems(mockNewsData);
-      setTotalPages(Math.ceil(mockNewsData.length / itemsPerPage));
-      setLoading(false);
-    }, 1000);
-  }, [language]);
+    fetchNews();
+  }, [language, currentPage, itemsPerPage]);
 
   const breadcrumbItems = [
     { label: t('nav.home'), href: '/' },
     { label: t('nav.news') }
   ];
 
-  // Pagination logic
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentNewsItems = newsItems.slice(startIndex, endIndex);
+  // News items are already paginated from API
+  const currentNewsItems = newsItems;
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -283,8 +207,8 @@ export default function NewsPage() {
               </div>
               <div className="text-center mt-4 text-sm text-gray-500">
                 {language === 'mn' 
-                  ? `Хуудас ${currentPage} / ${totalPages} (Нийт ${newsItems.length} мэдээ)`
-                  : `Page ${currentPage} of ${totalPages} (Total ${newsItems.length} news)`
+                  ? `Хуудас ${currentPage} / ${totalPages}`
+                  : `Page ${currentPage} of ${totalPages}`
                 }
               </div>
             </div>
