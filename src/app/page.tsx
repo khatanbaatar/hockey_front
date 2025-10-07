@@ -85,6 +85,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Video Section */}
+      <section className="py-12 bg-white">
+        <div className="flex justify-center">
+          <div className="block md:hidden">
+            <video 
+              autoPlay 
+              loop 
+              muted
+              playsInline 
+              className="min-w-full min-h-full max-w-none h-[20%] w-[40%]"
+            >
+              <source src="https://mihf.mn/03.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div className="hidden md:block">
+            <video 
+              autoPlay 
+              loop 
+              muted
+              playsInline 
+              className="min-w-full min-h-full max-w-none h-[20%] w-[20%]"
+            >
+              <source src="https://mihf.mn/03.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
