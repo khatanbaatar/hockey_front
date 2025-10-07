@@ -28,7 +28,28 @@ export default function PageContent({ slug }: PageContentProps) {
         const data = await response.json();
         
         if (data.success) {
-          setContent(data.data);
+          let pageData = data.data;
+          
+          // Add mock media data for gallery pages if no media exists
+          if ((slug === 'gallery-photos' || slug === 'gallery-videos') && (!pageData.media || pageData.media.length === 0)) {
+            const mediaType = slug === 'gallery-photos' ? 'image' : 'video';
+            const mediaCount = 16; // 4x4 grid
+            
+            pageData = {
+              ...pageData,
+              media: Array.from({ length: mediaCount }, (_, index) => ({
+                type: mediaType,
+                url: mediaType === 'image' 
+                  ? `https://picsum.photos/400/400?random=${index + 1}` 
+                  : `https://sample-videos.com/zip/10/mp4/SampleVideo_${(index % 3) + 1}.mp4`,
+                caption: language === 'mn' 
+                  ? `${mediaType === 'image' ? 'Зураг' : 'Бичлэг'} ${index + 1}` 
+                  : `${mediaType === 'image' ? 'Photo' : 'Video'} ${index + 1}`
+              }))
+            };
+          }
+          
+          setContent(pageData);
         } else {
           setError(data.message || 'Failed to load page content');
         }
