@@ -19,7 +19,7 @@ export default function PageContent({ slug }: PageContentProps) {
 
   useEffect(() => {
     const fetchPageContent = async () => {
-      const api = "http://5.135.26.43:15400";
+      const api = "https://hockey.onol.tech";
       try {
         setLoading(true);
         setError(null);
@@ -282,13 +282,13 @@ export default function PageContent({ slug }: PageContentProps) {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Left side - Image */}
-              <div className="flex justify-center lg:justify-end">
-                <div className="relative w-full max-w-md">
+              <div className="flex justify-center">
+                <div className="relative w-full">
                   <Image
                     src="/assets/president.jpeg"
                     alt="PRESIDENT OF MIHF JAVKHLAN BOLD"
-                    width={500}
-                    height={700}
+                    width={700}
+                    height={1000}
                     className="w-full h-auto rounded-lg shadow-lg"
                     priority
                   />
@@ -298,11 +298,11 @@ export default function PageContent({ slug }: PageContentProps) {
               {/* Right side - Content */}
               <div className="space-y-6">
                 <header className="animate-fade-in">
-                  <h1 className="text-2xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
+                  <h1 className="text-xl md:text-1xl lg:text-2xl font-bold text-gray-900 mb-6">
                     {content.title}
                   </h1>
                   <div className="prose prose-lg max-w-none">
-                    <p className="text-gray-700 leading-relaxed text-base lg:text-sm">
+                    <p className="text-gray-700 leading-relaxed text-base lg:text-sm text-justify">
                       {content.content}
                     </p>
                   </div>
@@ -318,7 +318,7 @@ export default function PageContent({ slug }: PageContentProps) {
                       >
                         {section.title !== 'Гарын үсэг' && (
                           <div className="prose prose-lg max-w-none mb-4">
-                            <p className="text-gray-700 leading-relaxed text-base lg:text-lg">
+                            <p className="text-gray-700 leading-relaxed text-sm lg:text-base text-justify">
                               {section.content}
                             </p>
                           </div>

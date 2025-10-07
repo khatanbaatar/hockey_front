@@ -14,7 +14,7 @@ export default function Header() {
 
   useEffect(() => {
     const fetchMenuItems = async () => {
-      const api = "http://5.135.26.43:15400";
+      const api = "https://hockey.onol.tech";
       try {
         const response = await fetch(api+`/api/menu?language=${language}`);
         const data = await response.json();
