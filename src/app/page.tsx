@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from '@/contexts/LanguageContext';
+import ImageCarousel from '@/components/ImageCarousel';
 
 export default function Home() {
   const { language, t } = useLanguage();
@@ -29,6 +30,57 @@ export default function Home() {
             >
               {t('home.schedule-button')}
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Image Carousel Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {language === 'mn' ? 'Хоккейн тэмцээн, арга хэмжээ' : 'Hockey Events & Competitions'}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {language === 'mn' 
+                ? 'Монголын хоккейн спортын тэмцээн, арга хэмжээний онцлох агшнууд'
+                : 'Highlights from Mongolian hockey sports competitions and events'
+              }
+            </p>
+          </div>
+          
+          <div className="max-w-6xl mx-auto">
+            <ImageCarousel 
+              images={[
+                {
+                  src: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=600&fit=crop",
+                  alt: language === 'mn' ? 'Хоккейн тэмцээн' : 'Hockey Match',
+                  caption: language === 'mn' ? 'Хоккейн тэмцээний агшин' : 'Hockey Match Moment'
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1200&h=600&fit=crop",
+                  alt: language === 'mn' ? 'Хоккейн талбай' : 'Hockey Rink',
+                  caption: language === 'mn' ? 'Хоккейн талбай дээрх тоглолт' : 'Game on Hockey Rink'
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&h=600&fit=crop",
+                  alt: language === 'mn' ? 'Хоккейн баг' : 'Hockey Team',
+                  caption: language === 'mn' ? 'Хоккейн багийн бүрэлдэхүүн' : 'Hockey Team Lineup'
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=600&fit=crop",
+                  alt: language === 'mn' ? 'Хоккейн тэмцээн' : 'Hockey Competition',
+                  caption: language === 'mn' ? 'Үндэсний тэмцээн' : 'National Competition'
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=1200&h=600&fit=crop",
+                  alt: language === 'mn' ? 'Хоккейн тамирчид' : 'Hockey Players',
+                  caption: language === 'mn' ? 'Хоккейн тамирчдын бэлтгэл' : 'Hockey Players Training'
+                }
+              ]}
+              autoPlay={true}
+              interval={4000}
+            />
           </div>
         </div>
       </section>
