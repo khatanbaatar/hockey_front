@@ -19,11 +19,12 @@ export default function PageContent({ slug }: PageContentProps) {
 
   useEffect(() => {
     const fetchPageContent = async () => {
+      const api = "http://5.135.26.43:15400";
       try {
         setLoading(true);
         setError(null);
         
-        const response = await fetch(`/api/pages/${slug}?language=${language}`);
+        const response = await fetch(api+`/api/page/${slug}?language=${language}`);
         const data = await response.json();
         
         if (data.success) {

@@ -11,7 +11,9 @@ export default async function SubPage({ params }: PageProps) {
   // For sub-pages, we'll use the subSlug as the main identifier
   // This allows for nested routing like /training-seminar/coaches
   const { slug, subSlug } = await params;
-  return <PageContent slug={`${slug}-${subSlug}`} />;
+  // Create the correct slug format for the API
+  const apiSlug = `${subSlug}`;
+  return <PageContent slug={apiSlug} />;
 }
 
 export async function generateStaticParams() {
