@@ -3,7 +3,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Footer() {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   return (
     <footer className="bg-gray-800 text-white py-8 mt-auto">
       <div className="container mx-auto px-4">

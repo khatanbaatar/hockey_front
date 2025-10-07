@@ -402,9 +402,11 @@ export default function PageContent({ slug }: PageContentProps) {
                     className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
                   >
                     {media.type === 'image' ? (
-                      <img
+                      <Image
                         src={media.url}
                         alt={media.caption || 'Media content'}
+                        width={400}
+                        height={224}
                         className="w-full h-48 lg:h-56 object-cover"
                         loading="lazy"
                       />

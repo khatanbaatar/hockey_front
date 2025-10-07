@@ -12,7 +12,7 @@ export default function Header() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -171,16 +171,16 @@ export default function Header() {
                               {subItem.slug === 'photos' && (
                                 <>
                                   <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <img src="/assets/header-bg.webp" alt="Preview 1" className="w-full h-full object-cover" />
+                                    <Image src="/assets/header-bg.webp" alt="Preview 1" width={100} height={100} className="w-full h-full object-cover" />
                                   </div>
                                   <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <img src="/assets/header-bg-1.webp" alt="Preview 2" className="w-full h-full object-cover" />
+                                    <Image src="/assets/header-bg-1.webp" alt="Preview 2" width={100} height={100} className="w-full h-full object-cover" />
                                   </div>
                                   <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <img src="/assets/president.jpeg" alt="Preview 3" className="w-full h-full object-cover" />
+                                    <Image src="/assets/president.jpeg" alt="Preview 3" width={100} height={100} className="w-full h-full object-cover" />
                                   </div>
                                   <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <img src="/assets/logo.webp" alt="Preview 4" className="w-full h-full object-cover" />
+                                    <Image src="/assets/logo.webp" alt="Preview 4" width={100} height={100} className="w-full h-full object-cover" />
                                   </div>
                                 </>
                               )}
