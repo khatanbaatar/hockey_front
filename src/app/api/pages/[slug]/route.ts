@@ -271,14 +271,173 @@ const pageContentData: Record<string, PageContent> = {
     id: '6-1',
     title: 'Photos',
     content: 'Тэмцээн, арга хэмжээний зургууд.',
-    subSections: [
+    media: [
       {
-        title: 'Тэмцээний зургууд',
-        content: 'Төрөл бүрийн тэмцээний зургууд.'
+        type: 'image' as const,
+        url: '/assets/header-bg.webp',
+        caption: 'Хоккейн тэмцээн - 1'
       },
       {
-        title: 'Арга хэмжээний зургууд',
-        content: 'Холбооны арга хэмжээний зургууд.'
+        type: 'image' as const,
+        url: '/assets/header-bg-1.webp',
+        caption: 'Хоккейн тэмцээн - 2'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/president.jpeg',
+        caption: 'Ерөнхийлөгч'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/logo.webp',
+        caption: 'Холбооны лого'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/header-bg.webp',
+        caption: 'Хоккейн тэмцээн - 3'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/header-bg-1.webp',
+        caption: 'Хоккейн тэмцээн - 4'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/president.jpeg',
+        caption: 'Холбооны арга хэмжээ'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/logo.webp',
+        caption: 'Тэмцээний зургууд'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/header-bg.webp',
+        caption: 'Хоккейн тэмцээн - 5'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/header-bg-1.webp',
+        caption: 'Хоккейн тэмцээн - 6'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/president.jpeg',
+        caption: 'Спортын арга хэмжээ'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/logo.webp',
+        caption: 'Холбооны зургууд'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/header-bg.webp',
+        caption: 'Хоккейн тэмцээн - 7'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/header-bg-1.webp',
+        caption: 'Хоккейн тэмцээн - 8'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/president.jpeg',
+        caption: 'Арга хэмжээний зургууд'
+      },
+      {
+        type: 'image' as const,
+        url: '/assets/logo.webp',
+        caption: 'Холбооны түүхэн зургууд'
+      }
+    ]
+  },
+  'gallery-videos': {
+    id: '6-2',
+    title: 'Videos',
+    content: 'Тэмцээн, арга хэмжээний бичлэгүүд.',
+    media: [
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Хоккейн тэмцээн - Бичлэг 1'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Хоккейн тэмцээн - Бичлэг 2'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Спортын арга хэмжээ - Бичлэг 1'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Спортын арга хэмжээ - Бичлэг 2'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Холбооны бичлэг - 1'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Холбооны бичлэг - 2'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Тэмцээний бичлэг - 1'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Тэмцээний бичлэг - 2'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Хоккейн бичлэг - 1'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Хоккейн бичлэг - 2'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Арга хэмжээний бичлэг - 1'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Арга хэмжээний бичлэг - 2'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Спортын бичлэг - 1'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Спортын бичлэг - 2'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        caption: 'Холбооны түүхэн бичлэг'
+      },
+      {
+        type: 'video' as const,
+        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4',
+        caption: 'Хоккейн түүхэн бичлэг'
       }
     ]
   },

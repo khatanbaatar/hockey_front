@@ -162,6 +162,93 @@ export default function PageContent({ slug }: PageContentProps) {
     );
   }
 
+  // Special layout for gallery pages (photos and videos)
+  if (slug === 'gallery-photos' || slug === 'gallery-videos') {
+    return (
+      <div className="min-h-screen">
+        <Breadcrumb items={generateBreadcrumbs(slug)} />
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-7xl mx-auto">
+            <header className="mb-8 animate-fade-in">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                {content.title}
+              </h1>
+              <div className="prose prose-lg max-w-none">
+                <p className="text-gray-700 leading-relaxed text-lg">
+                  {content.content}
+                </p>
+              </div>
+            </header>
+
+            {content.media && content.media.length > 0 && (
+              <div className="animate-fade-in">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-6 lg:mb-8">
+                  Медиа контент
+                </h2>
+                {/* 4x4 Grid Layout */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                  {content.media.map((media, index) => (
+                    <div 
+                      key={index} 
+                      className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                    >
+                      {media.type === 'image' ? (
+                        <div className="relative aspect-square">
+                          <Image
+                            src={media.url}
+                            alt={media.caption || 'Media content'}
+                            fill
+                            className="object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : (
+                        <div className="relative aspect-square">
+                          <video
+                            src={media.url}
+                            controls
+                            className="w-full h-full object-cover"
+                            preload="metadata"
+                          />
+                        </div>
+                      )}
+                      {media.caption && (
+                        <div className="p-3">
+                          <p className="text-sm text-gray-600 font-medium line-clamp-2">{media.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {content.subSections && content.subSections.length > 0 && (
+              <div className="mt-12 space-y-6 lg:space-y-8">
+                {content.subSections.map((section, index) => (
+                  <section 
+                    key={index} 
+                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 lg:p-8 hover:shadow-md transition-shadow animate-fade-in"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-4 lg:mb-6">
+                      {section.title}
+                    </h2>
+                    <div className="prose prose-lg max-w-none">
+                      <p className="text-gray-700 leading-relaxed text-base lg:text-lg">
+                        {section.content}
+                      </p>
+                    </div>
+                  </section>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Special layout for president page
   if (slug === 'about-us-president') {
     return (
