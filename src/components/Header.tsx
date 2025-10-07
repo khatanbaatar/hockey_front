@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { MenuItem } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -41,7 +42,16 @@ export default function Header() {
       <header className="bg-blue-900 text-white shadow-lg">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="text-xl font-bold">Хоккейн холбоо</div>
+            <div className="flex items-center space-x-3">
+              <Image
+                src="/assets/logo.webp"
+                alt="Монголын хоккейн холбоо"
+                width={40}
+                height={40}
+                className="w-10 h-10 object-contain"
+              />
+              <span className="text-xl font-bold">Монголын хоккейн холбоо</span>
+            </div>
             <div className="animate-pulse">Loading...</div>
           </div>
         </div>
@@ -53,8 +63,17 @@ export default function Header() {
     <header className="bg-blue-900 text-white shadow-lg">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold hover:text-blue-200 transition-colors">
-            {language === 'mn' ? 'Хоккейн холбоо' : 'Hockey Federation'}
+          <Link href="/" className="flex items-center space-x-3 hover:text-blue-200 transition-colors">
+            <Image
+              src="/assets/logo.webp"
+              alt="Монголын хоккейн холбоо"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain"
+            />
+            <span className="text-xl font-bold">
+              {language === 'mn' ? 'Монголын хоккейн холбоо' : 'Mongolian Hockey Federation'}
+            </span>
           </Link>
           
           {/* Language Switcher - Desktop */}
@@ -88,12 +107,18 @@ export default function Header() {
           <ul className="flex flex-wrap gap-6">
             {menuItems.map((item) => (
               <li key={item.id} className="relative group">
-                <Link
-                  href={`/${item.slug}`}
-                  className="block py-2 px-3 rounded-lg hover:bg-blue-800 transition-colors"
-                >
-                  {item.name}
-                </Link>
+                {item.subItems && item.subItems.length > 0 ? (
+                  <span className="block py-2 px-3 rounded-lg hover:bg-blue-800 transition-colors cursor-pointer">
+                    {item.name}
+                  </span>
+                ) : (
+                  <Link
+                    href={`/${item.slug}`}
+                    className="block py-2 px-3 rounded-lg hover:bg-blue-800 transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                )}
                 
                 {/* Dropdown for sub-items */}
                 {item.subItems && item.subItems.length > 0 && (
@@ -179,18 +204,29 @@ export default function Header() {
             <ul className="space-y-2">
               {menuItems.map((item) => (
                 <li key={item.id}>
-                  <Link
-                    href={`/${item.slug}`}
-                    className="block py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <div className="font-medium">{item.name}</div>
-                    {item.description && (
-                      <div className="text-sm text-blue-200 mt-1">
-                        {item.description}
-                      </div>
-                    )}
-                  </Link>
+                  {item.subItems && item.subItems.length > 0 ? (
+                    <div className="block py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
+                      <div className="font-medium">{item.name}</div>
+                      {item.description && (
+                        <div className="text-sm text-blue-200 mt-1">
+                          {item.description}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      href={`/${item.slug}`}
+                      className="block py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <div className="font-medium">{item.name}</div>
+                      {item.description && (
+                        <div className="text-sm text-blue-200 mt-1">
+                          {item.description}
+                        </div>
+                      )}
+                    </Link>
+                  )}
                   
                   {/* Mobile sub-items */}
                   {item.subItems && item.subItems.length > 0 && (

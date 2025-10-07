@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Монгол улсын хоккейн холбоо",
-  description: "Монгол улсын хоккейн спортын хөгжүүлэлт, тэмцээн зохион байгуулалт",
+  title: "Монголын хоккейн холбоо",
+  description: "Монголын хоккейн спортын хөгжүүлэлт, тэмцээн зохион байгуулалт",
   icons: {
     icon: '/assets/logo.webp',
     shortcut: '/assets/logo.webp',
