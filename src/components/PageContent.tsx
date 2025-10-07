@@ -279,7 +279,7 @@ export default function PageContent({ slug }: PageContentProps) {
       <div className="min-h-screen">
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-8xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Left side - Image */}
               <div className="flex justify-center">
@@ -287,8 +287,8 @@ export default function PageContent({ slug }: PageContentProps) {
                   <Image
                     src="/assets/president.jpeg"
                     alt="PRESIDENT OF MIHF JAVKHLAN BOLD"
-                    width={700}
-                    height={1000}
+                    width={500}
+                    height={700}
                     className="w-full h-auto rounded-lg shadow-lg"
                     priority
                   />
@@ -298,7 +298,7 @@ export default function PageContent({ slug }: PageContentProps) {
               {/* Right side - Content */}
               <div className="space-y-6">
                 <header className="animate-fade-in">
-                  <h1 className="text-xl md:text-1xl lg:text-2xl font-bold text-gray-900 mb-6">
+                  <h1 className="text-xl md:text-1xl lg:text-2xl font-bold text-center text-gray-900 mb-6">
                     {content.title}
                   </h1>
                   <div className="prose prose-lg max-w-none">
@@ -316,18 +316,29 @@ export default function PageContent({ slug }: PageContentProps) {
                         className="animate-fade-in"
                         style={{ animationDelay: `${index * 0.1}s` }}
                       >
-                        {section.title !== 'Гарын үсэг' && (
+                        {section.title !== (language === 'mn' ? 'Гарын үсэг' : 'Signature') && (
                           <div className="prose prose-lg max-w-none mb-4">
-                            <p className="text-gray-700 leading-relaxed text-sm lg:text-base text-justify">
+                            <p className="text-gray-700 leading-relaxed text-base lg:text-lg text-justify">
                               {section.content}
                             </p>
                           </div>
                         )}
-                        {section.title === 'Гарын үсэг' && (
+                        {section.title === (language === 'mn' ? 'Гарын үсэг' : 'Signature') && (
                           <div className="mt-8 pt-6 border-t border-gray-200">
-                            <p className="text-gray-800 font-medium text-lg italic">
-                              {section.content}
-                            </p>
+                            <div className="flex flex-col items-end space-y-4">
+                              <p className="text-gray-800 font-medium text-lg italic text-right">
+                                {section.content}
+                              </p>
+                              <div className="relative">
+                                <Image
+                                  src="/assets/signature.png"
+                                  alt={language === 'mn' ? 'Гарын үсэг' : 'Signature'}
+                                  width={200}
+                                  height={100}
+                                  className="object-contain"
+                                />
+                              </div>
+                            </div>
                           </div>
                         )}
                       </section>

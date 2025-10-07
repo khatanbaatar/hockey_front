@@ -62,8 +62,8 @@ export default function Header() {
               <Image
                 src="/assets/logo.webp"
                 alt="Монголын хоккейн холбоо"
-                width={40}
-                height={40}
+                width={80}
+                height={80}
                 className="w-10 h-10 object-contain"
               />
               <span className="text-xl font-bold">Монголын хоккейн холбоо</span>
@@ -83,8 +83,8 @@ export default function Header() {
             <Image
               src="/assets/logo.webp"
               alt="Монголын хоккейн холбоо"
-              width={40}
-              height={40}
+              width={50}
+              height={50}
               className="w-10 h-10 object-contain"
             />
             <span className="text-xl font-bold">
