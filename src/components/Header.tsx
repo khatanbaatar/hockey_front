@@ -55,234 +55,82 @@ export default function Header() {
 
   if (loading) {
     return (
-      <header className="bg-blue-900 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+      <nav className="bg-white shadow-lg border-b border-gray-200">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-3">
               <Image
                 src="/assets/logo.webp"
                 alt="Монголын хоккейн холбоо"
-                width={80}
-                height={80}
-                className="w-10 h-10 object-contain"
+                width={32}
+                height={32}
+                className="object-contain"
               />
-              <span className="text-xl font-bold">Монголын хоккейн холбоо</span>
+              <span className="text-xl font-bold text-gray-900">Монголын хоккейн холбоо</span>
             </div>
-            <div className="animate-pulse">Loading...</div>
+            <div className="animate-pulse text-gray-500">Loading...</div>
           </div>
         </div>
-      </header>
+      </nav>
     );
   }
 
   return (
-    <header className="bg-blue-900 text-white shadow-lg">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-3 hover:text-blue-200 transition-colors">
+    <nav className="bg-white shadow-lg border-b border-gray-200">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between py-4">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-3">
             <Image
               src="/assets/logo.webp"
               alt="Монголын хоккейн холбоо"
-              width={50}
-              height={50}
-              className="w-10 h-10 object-contain"
+              width={32}
+              height={32}
+              className="object-contain"
             />
-            <span className="text-xl font-bold">
+            <span className="text-xl font-bold text-gray-900">
               {language === 'mn' ? 'Монголын хоккейн холбоо' : 'Mongolian Hockey Federation'}
             </span>
           </Link>
-          
-          {/* Language Switcher - Desktop */}
-          <div className="hidden md:block">
-            <LanguageSwitcher />
-          </div>
-          
-          {/* Mobile menu button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 rounded-lg hover:bg-blue-800 transition-colors"
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
 
-        {/* Desktop menu */}
-        <nav className="hidden md:block mt-4">
-          <ul className="flex flex-wrap gap-6">
-            {menuItems.map((item) => (
-              <li key={item.id} className="relative group">
-                {item.subItems && item.subItems.length > 0 ? (
-                  <span className={`block py-2 px-3 rounded-lg transition-colors cursor-pointer ${
-                    isActive(item) 
-                      ? 'bg-blue-600 text-white' 
-                      : 'hover:bg-blue-800 text-blue-100 hover:text-white'
-                  }`}>
-                    {item.name}
-                    <svg className="inline-block ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </span>
-                ) : (
-                  <Link
-                    href={`/${item.slug}`}
-                    className={`block py-2 px-3 rounded-lg transition-colors ${
-                      isActive(item)
-                        ? 'bg-blue-600 text-white'
-                        : 'hover:bg-blue-800 text-white hover:text-blue-100'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                )}
-                
-                {/* Dropdown for sub-items */}
-                {item.subItems && item.subItems.length > 0 && (
-                  <ul className={`absolute top-full left-0 mt-1 bg-blue-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 ${
-                    item.slug === 'gallery' ? 'w-96' : 'w-64'
-                  }`}>
-                    {item.subItems.map((subItem) => (
-                      <li key={subItem.id}>
-                        <Link
-                          href={`/${item.slug}/${subItem.slug}`}
-                          className="block py-3 px-4 hover:bg-blue-700 transition-colors first:rounded-t-lg last:rounded-b-lg"
-                        >
-                          <div className="font-medium">{subItem.name}</div>
-                          {subItem.description && (
-                            <div className="text-sm text-blue-200 mt-1">
-                              {subItem.description}
-                            </div>
-                          )}
-                          
-                          {/* Grid preview for gallery items */}
-                          {item.slug === 'gallery' && (
-                            <div className="mt-3 grid grid-cols-4 gap-1">
-                              {subItem.slug === 'photos' && (
-                                <>
-                                  <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <Image src="/assets/header-bg.webp" alt="Preview 1" width={100} height={100} className="w-full h-full object-cover" />
-                                  </div>
-                                  <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <Image src="/assets/header-bg-1.webp" alt="Preview 2" width={100} height={100} className="w-full h-full object-cover" />
-                                  </div>
-                                  <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <Image src="/assets/president.jpeg" alt="Preview 3" width={100} height={100} className="w-full h-full object-cover" />
-                                  </div>
-                                  <div className="aspect-square bg-blue-600 rounded overflow-hidden">
-                                    <Image src="/assets/logo.webp" alt="Preview 4" width={100} height={100} className="w-full h-full object-cover" />
-                                  </div>
-                                </>
-                              )}
-                              {subItem.slug === 'videos' && (
-                                <>
-                                  <div className="aspect-square bg-blue-600 rounded flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                                    </svg>
-                                  </div>
-                                  <div className="aspect-square bg-blue-600 rounded flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                                    </svg>
-                                  </div>
-                                  <div className="aspect-square bg-blue-600 rounded flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                                    </svg>
-                                  </div>
-                                  <div className="aspect-square bg-blue-600 rounded flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                                    </svg>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          )}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* Mobile menu */}
-        {isMenuOpen && (
-          <nav className="md:hidden mt-4 bg-blue-800 rounded-lg p-4">
-            {/* Language Switcher - Mobile */}
-            <div className="mb-4 pb-4 border-b border-blue-700">
-              <LanguageSwitcher />
-            </div>
-            
-            <ul className="space-y-2">
+          {/* Desktop Navigation Menu - Center */}
+          <div className="hidden md:flex items-center">
+            <ul className="flex items-center space-x-8">
               {menuItems.map((item) => (
-                <li key={item.id}>
+                <li key={item.id} className="relative group">
                   {item.subItems && item.subItems.length > 0 ? (
-                    <div className={`block py-3 px-4 rounded-lg transition-colors cursor-pointer ${
-                      isActive(item)
-                        ? 'bg-blue-600'
-                        : 'bg-blue-700 hover:bg-blue-600'
-                    }`}>
-                      <div className={`font-semibold flex items-center ${
-                        isActive(item) ? 'text-white' : 'text-blue-100'
-                      }`}>
-                        {item.name}
-                        <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                      {item.description && (
-                        <div className="text-sm text-blue-200 mt-1">
-                          {item.description}
-                        </div>
-                      )}
-                    </div>
+                    <span className="block py-2 px-3 text-gray-700 hover:text-indigo-600 transition-colors cursor-pointer flex items-center font-medium">
+                      {item.name}
+                      <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </span>
                   ) : (
                     <Link
                       href={`/${item.slug}`}
-                      className={`block py-3 px-4 rounded-lg transition-colors ${
-                        isActive(item)
-                          ? 'bg-blue-600'
-                          : 'hover:bg-blue-700'
+                      className={`block py-2 px-3 text-gray-700 hover:text-indigo-600 transition-colors font-medium ${
+                        isActive(item) ? 'text-indigo-600' : ''
                       }`}
-                      onClick={() => setIsMenuOpen(false)}
                     >
-                      <div className={`font-medium ${
-                        isActive(item) ? 'text-white' : 'text-white'
-                      }`}>{item.name}</div>
-                      {item.description && (
-                        <div className="text-sm text-blue-200 mt-1">
-                          {item.description}
-                        </div>
-                      )}
+                      {item.name}
                     </Link>
                   )}
-                  
-                  {/* Mobile sub-items */}
+                
+                  {/* Dropdown for sub-items */}
                   {item.subItems && item.subItems.length > 0 && (
-                    <ul className="ml-4 mt-2 space-y-1">
+                    <ul className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 w-64 border border-gray-200">
                       {item.subItems.map((subItem) => (
                         <li key={subItem.id}>
                           <Link
                             href={`/${item.slug}/${subItem.slug}`}
-                            className="block py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                            onClick={() => setIsMenuOpen(false)}
+                            className="block py-3 px-4 hover:bg-gray-50 transition-colors first:rounded-t-lg last:rounded-b-lg"
                           >
-                            {subItem.name}
+                            <div className="font-medium text-gray-900">{subItem.name}</div>
+                            {subItem.description && (
+                              <div className="text-sm text-gray-500 mt-1">
+                                {subItem.description}
+                              </div>
+                            )}
                           </Link>
                         </li>
                       ))}
@@ -291,9 +139,87 @@ export default function Header() {
                 </li>
               ))}
             </ul>
-          </nav>
+          </div>
+
+          {/* Right side - Language Switcher and Mobile Menu */}
+          <div className="flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
+            {/* Mobile menu button */}
+            <button
+              onClick={toggleMenu}
+              className="md:hidden p-2"
+              aria-label="Toggle menu"
+            >
+              <div className="w-6 h-6 flex flex-col justify-center space-y-1">
+                <span className="block h-0.5 w-6 bg-gray-900"></span>
+                <span className="block h-0.5 w-6 bg-gray-900"></span>
+                <span className="block h-0.5 w-6 bg-gray-900"></span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <ul className="space-y-2">
+            {menuItems.map((item) => (
+              <li key={item.id}>
+                {item.subItems && item.subItems.length > 0 ? (
+                  <div className="block py-3 px-4 rounded-lg transition-colors cursor-pointer hover:bg-gray-50 text-gray-700">
+                    <div className="font-semibold flex items-center">
+                      {item.name}
+                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                    {item.description && (
+                      <div className="text-sm text-gray-500 mt-1">
+                        {item.description}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    href={`/${item.slug}`}
+                    className="block py-3 px-4 rounded-lg transition-colors hover:bg-gray-50 text-gray-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <div className="font-medium">{item.name}</div>
+                    {item.description && (
+                      <div className="text-sm text-gray-500 mt-1">
+                        {item.description}
+                      </div>
+                    )}
+                  </Link>
+                )}
+                
+                {/* Mobile sub-items */}
+                {item.subItems && item.subItems.length > 0 && (
+                  <ul className="ml-4 mt-2 space-y-1">
+                    {item.subItems.map((subItem) => (
+                      <li key={subItem.id}>
+                        <Link
+                          href={`/${item.slug}/${subItem.slug}`}
+                          className="block py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-600"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {subItem.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+          </div>
         )}
       </div>
-    </header>
+    </nav>
   );
 }

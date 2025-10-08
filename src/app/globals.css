@@ -5,6 +5,106 @@
   --foreground: #171717;
 }
 
+/* Techwind Navbar Styles */
+.defaultscroll {
+  position: relative;
+}
+
+.is-sticky {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  transition: all 0.5s ease;
+}
+
+.navigation-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation-menu li {
+  position: relative;
+}
+
+.navigation-menu li:hover > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sub-menu-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.menu-extras {
+  display: flex;
+  align-items: center;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  width: 24px;
+  height: 18px;
+  justify-content: space-between;
+}
+
+.menu-arrow {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+/* Hover effects for desktop navigation */
+.navigation-menu > li:hover > .sub-menu-item {
+  color: #2563eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navigation-menu {
+    display: none;
+  }
+  
+  .is-sticky {
+    position: relative !important;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
