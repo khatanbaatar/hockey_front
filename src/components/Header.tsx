@@ -12,8 +12,9 @@ export default function Header() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { language } = useLanguage();
+  const { language,setLanguage } = useLanguage();
   const pathname = usePathname();
+
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -33,6 +34,30 @@ export default function Header() {
     };
 
     fetchMenuItems();
+    const windowScroll = () => {
+      const navbar = document.getElementById("topnav");
+      if (navbar != null) {
+          if (
+              document.body.scrollTop >= 50 ||
+              document.documentElement.scrollTop >= 50
+          ) {
+              navbar.classList.add("nav-sticky");
+              // ⚠️ Таны JS-д defaultscroll-ийг арилгах код байхгүй тул,
+              // энд бас арилгахгүй байхаар орхиё.
+          } else {
+              navbar.classList.remove("nav-sticky");
+              // Scroll хийгээгүй үед defaultscroll класс байх ёстой
+          }
+      }
+    }
+
+    // Scroll listener нэмэх
+    window.addEventListener('scroll', windowScroll);
+
+    // Компонент устгагдахад listener-ийг цэвэрлэх
+    return () => {
+        window.removeEventListener('scroll', windowScroll);
+    };
   }, [language]);
 
   const toggleMenu = () => {
@@ -55,8 +80,8 @@ export default function Header() {
 
   if (loading) {
     return (
-      <nav className="bg-white shadow-lg border-b border-gray-200">
-        <div className="container mx-auto px-4">
+      <nav className="defaultscroll is-sticky">
+        <div className="container relative">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-3">
               <Image
@@ -76,77 +101,95 @@ export default function Header() {
   }
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-4">
+    <nav id="topnav" className="defaultscroll is-sticky">
+      <div className="container relative"> 
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <Image
+          <a href="/" className="logo">
+          
+          <Image
               src="/assets/logo.webp"
               alt="Монголын хоккейн холбоо"
-              width={32}
-              height={32}
+              width={60}
+              height={50}
               className="object-contain"
             />
-            <span className="text-xl font-bold text-gray-900">
+          
+            {/* <span className="text-xl font-bold text-gray-900">
               {language === 'mn' ? 'Монголын хоккейн холбоо' : 'Mongolian Hockey Federation'}
-            </span>
-          </Link>
+            </span> */}
+          </a>
 
-          {/* Desktop Navigation Menu - Center */}
-          <div className="hidden md:flex items-center">
-            <ul className="flex items-center space-x-8">
-              {menuItems.map((item) => (
-                <li key={item.id} className="relative group">
-                  {item.subItems && item.subItems.length > 0 ? (
-                    <span className="block py-2 px-3 text-gray-700 hover:text-indigo-600 transition-colors cursor-pointer flex items-center font-medium">
-                      {item.name}
-                      <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </span>
-                  ) : (
-                    <Link
-                      href={`/${item.slug}`}
-                      className={`block py-2 px-3 text-gray-700 hover:text-indigo-600 transition-colors font-medium ${
-                        isActive(item) ? 'text-indigo-600' : ''
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                
-                  {/* Dropdown for sub-items */}
-                  {item.subItems && item.subItems.length > 0 && (
-                    <ul className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 w-64 border border-gray-200">
-                      {item.subItems.map((subItem) => (
-                        <li key={subItem.id}>
-                          <Link
-                            href={`/${item.slug}/${subItem.slug}`}
-                            className="block py-3 px-4 hover:bg-gray-50 transition-colors first:rounded-t-lg last:rounded-b-lg"
-                          >
-                            <div className="font-medium text-gray-900">{subItem.name}</div>
-                            {subItem.description && (
-                              <div className="text-sm text-gray-500 mt-1">
-                                {subItem.description}
-                              </div>
-                            )}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="buy-button list-none mb-0">
+            <li className="inline mb-0">
+                <a onClick={() => setLanguage('mn')}>
+                    <span className="login-btn-primary"><span className="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-indigo-600/5 hover:bg-indigo-600 border border-indigo-600/10 hover:border-indigo-600 text-indigo-600 hover:text-white"><i data-feather="settings" className="size-4"></i></span></span>
+                    <span className="login-btn-light"><span className="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-gray-50 hover:bg-gray-200 dark:bg-slate-900 dark:hover:bg-gray-700 border hover:border-gray-100 dark:border-gray-800 dark:hover:border-gray-700"><i data-feather="settings" className="size-4"></i></span></span>
+                </a>
+            </li>
+            
+            <li className="inline ps-1 mb-0">
+                <a onClick={() => setLanguage('en')}>
+                    <div className="login-btn-primary"><span className="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-indigo-600 hover:bg-indigo-700 border border-indigo-600 hover:border-indigo-700 text-white"><i data-feather="shopping-cart" className="size-4"></i></span></div>
+                    <div className="login-btn-light"><span className="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-base text-center rounded-full bg-gray-50 hover:bg-gray-200 dark:bg-slate-900 dark:hover:bg-gray-700 border hover:border-gray-100 dark:border-gray-800 dark:hover:border-gray-700"><i data-feather="shopping-cart" className="size-4"></i></span></div>
+                </a>
+            </li>
+        </ul>
 
-          {/* Right side - Language Switcher and Mobile Menu */}
-          <div className="flex items-center space-x-4">
-            {/* Language Switcher */}
+          <div id="navigation">
+          <ul className="navigation-menu nav-light">
+            {menuItems.map((item) => (
+              <li
+                key={item.id}
+                // Custom CSS-ийн классуудыг нэмнэ
+                className={`${item.subItems && item.subItems.length > 0 ? 'has-submenu parent-parent-menu-item' : ''}`}
+              >
+                {/* Үндсэн цэсний линк / span */}
+                {item.subItems && item.subItems.length > 0 ? (
+                  <a className="sub-menu-item">
+                    {item.name}
+                    <span className="menu-arrow"></span>
+                  </a>
+                ) : (
+                  <Link
+                    href={`/${item.slug}`}
+                    className={`sub-menu-item ${isActive(item) ? 'text-indigo-600' : ''}`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+
+                {/* Submenu (Энгийн Dropdown) */}
+                {item.subItems && item.subItems.length > 0 && (
+                  // 🚨 Зөвхөн "submenu" классыг үлдээснээр энгийн dropdown үүснэ.
+                  <ul className="submenu">
+                    {item.subItems.map((subItem) => (
+                      <li key={subItem.id}>
+                        <Link
+                          href={`/${item.slug}/${subItem.slug}`}
+                          className="sub-menu-item"
+                          onClick={() => setIsMenuOpen(false)} // Mobile-д зориулж нэмлээ
+                        >
+                          {subItem.name}
+                          {/* Таны Custom Tag/Badge-ийг харуулна (API-аас ирдэг бол) */}
+                          {/* {subItem.tag && ( 
+                            <span className="bg-red-500 inline-block text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5 ms-1">
+                                {subItem.tag}
+                            </span>
+                          )} */}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+
+          {/* <div className="flex items-center space-x-4">
             <LanguageSwitcher />
             
-            {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
               className="md:hidden p-2"
@@ -158,8 +201,7 @@ export default function Header() {
                 <span className="block h-0.5 w-6 bg-gray-900"></span>
               </div>
             </button>
-          </div>
-        </div>
+          </div> */}
 
         {/* Mobile menu */}
         {isMenuOpen && (

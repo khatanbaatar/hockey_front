@@ -49,31 +49,43 @@ export default function ImageCarousel({
   if (images.length === 0) return null;
 
   return (
-    <div className="relative w-full h-96 md:h-[500px] lg:h-[600px] overflow-hidden rounded-lg shadow-2xl">
-      {/* Main Image */}
-      <div className="relative w-full h-full">
-        <Image
-          src={images[currentIndex].src}
-          alt={images[currentIndex].alt}
-          fill
-          className="object-cover transition-opacity duration-500"
-          priority={currentIndex === 0}
-        />
-        
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        
-        {/* Caption */}
-        {images[currentIndex].caption && (
-          <div className="absolute bottom-6 left-6 right-6 text-white">
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2">
-              {images[currentIndex].caption}
-            </h3>
+    // 🚨 Гаднах Container: Overflow-hidden хийж, зөвхөн нэг зураг харагдана
+    <div className="relative w-full h-96 md:h-[100vh] lg:h-[100vh] overflow-hidden">
+      
+      {/* 🚨 Slide Container: Бүх зургийг багтааж, хөдөлгөөнийг удирдана */}
+      <div 
+        className="flex h-full transition-transform duration-500 ease-in-out"
+        // 🚨 Transform-ийг ашиглан зураг урсах эффектийг үүсгэнэ
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }} 
+      >
+        {images.map((image, index) => (
+          // 🚨 Image Wrapper: 100% өргөнтэй байх ёстой
+          <div key={index} className="flex-shrink-0 w-full h-full relative">
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              className="object-cover"
+              // Зөвхөн эхний зургийг Priority хийнэ
+              priority={index === 0} 
+            />
+            
+            {/* Overlay and Caption (Хөдөлж буй зураг бүр дээрх Caption) */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {image.caption && (
+              <div className="absolute md:end-0 md:start-auto bottom-0 w-full lg:w-[700px] md:w-[500px] h-fit bg-white dark:bg-slate-900 md:p-20 p-10">
+                        <h5 className="text-xl md:text-2xl lg:text-3xl uppercase font-bold mb-4 text-sm">{image.caption}</h5>
+                        {/* <div className="mt-8">
+                            <a href="" className="relative inline-block font-semibold tracking-wide align-middle text-base text-center border-none after:content-[''] after:absolute after:h-px after:w-0 hover:after:w-full after:end-0 hover:after:end-auto after:bottom-0 after:start-0 after:duration-500 text-indigo-600 hover:text-indigo-600 after:bg-indigo-600 duration-500 ease-in-out">Shop Now <i className="uil uil-arrow-right"></i></a>
+                        </div> */}
+                    </div>
+            )}
           </div>
-        )}
+        ))}
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows (Хэвээр үлдэнэ) */}
       {images.length > 1 && (
         <>
           <button
@@ -98,8 +110,8 @@ export default function ImageCarousel({
         </>
       )}
 
-      {/* Dots Indicator */}
-      {images.length > 1 && (
+      {/* Dots Indicator (Хэвээр үлдэнэ) */}
+      {/* {images.length > 1 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
           {images.map((_, index) => (
             <button
@@ -114,7 +126,7 @@ export default function ImageCarousel({
             />
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }
