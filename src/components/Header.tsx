@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { MenuItem } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
-import LanguageSwitcher from './LanguageSwitcher';
+// import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -104,7 +104,7 @@ export default function Header() {
     <nav id="topnav" className="defaultscroll is-sticky">
       <div className="container relative"> 
           {/* Logo */}
-          <a href="/" className="logo">
+          <Link href="/" className="logo">
           
           <Image
               src="/assets/logo.webp"
@@ -117,7 +117,7 @@ export default function Header() {
             {/* <span className="text-xl font-bold text-gray-900">
               {language === 'mn' ? 'Монголын хоккейн холбоо' : 'Mongolian Hockey Federation'}
             </span> */}
-          </a>
+          </Link>
 
           <ul className="buy-button list-none mb-0">
             <li className="inline mb-0">
@@ -187,8 +187,8 @@ export default function Header() {
         </div>
 
 
-          {/* <div className="flex items-center space-x-4">
-            <LanguageSwitcher />
+          <div className="flex items-center space-x-4">
+            {/* <LanguageSwitcher /> */}
             
             <button
               onClick={toggleMenu}
@@ -201,7 +201,7 @@ export default function Header() {
                 <span className="block h-0.5 w-6 bg-gray-900"></span>
               </div>
             </button>
-          </div> */}
+          </div>
 
         {/* Mobile menu */}
         {isMenuOpen && (

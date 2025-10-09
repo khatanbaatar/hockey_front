@@ -34,9 +34,9 @@ export default function ImageCarousel({
     return () => clearInterval(timer);
   }, [autoPlay, interval, images.length]);
 
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
+  // const goToSlide = (index: number) => {
+  //   setCurrentIndex(index);
+  // };
 
   const goToPrevious = () => {
     setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
