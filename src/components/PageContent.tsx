@@ -277,6 +277,7 @@ export default function PageContent({ slug }: PageContentProps) {
   if (slug === 'about-us-president') {
     return (
       <div className="min-h-screen">
+        <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-8xl mx-auto">
@@ -355,9 +356,10 @@ export default function PageContent({ slug }: PageContentProps) {
 
   return (
     <div className="min-h-screen">
+      <div className="pt-40 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
       <Breadcrumb items={generateBreadcrumbs(slug)} />
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           <header className="mb-8 animate-fade-in">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               {content.title}

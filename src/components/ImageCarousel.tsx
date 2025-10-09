@@ -66,6 +66,7 @@ export default function ImageCarousel({
               alt={image.alt}
               fill
               className="object-cover"
+              unoptimized={true}
               // Зөвхөн эхний зургийг Priority хийнэ
               priority={index === 0} 
             />

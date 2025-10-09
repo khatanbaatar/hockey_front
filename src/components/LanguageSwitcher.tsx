@@ -3,7 +3,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function LanguageSwitcher() {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage } = useLanguage();
 
   return (
     <div className="flex items-center space-x-2">
