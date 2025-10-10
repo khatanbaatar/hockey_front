@@ -78,6 +78,8 @@ export default function PageContent({ slug }: PageContentProps) {
       'training-seminar': t('nav.training'),
       'teams': t('nav.teams'),
       'gallery': t('nav.gallery'),
+      'gallery-photos': t('nav.gallery-photos'),
+      'gallery-videos': t('nav.gallery-videos'),
       'competition-schedule': t('nav.schedule'),
       'referees': t('nav.referees'),
       'rules-regulations': t('nav.rules'),
@@ -118,8 +120,8 @@ export default function PageContent({ slug }: PageContentProps) {
         'international': 'Олон улсын',
         'clubs-teams-list': 'Баг, клубын жагсаалт',
         'contact-info': 'Холбоо барих мэдээлэл',
-        'photos': 'Зургууд',
-        'videos': 'Бичлэгүүд',
+        'gallery-photos': 'Зургууд',
+        'gallery-videos': 'Бичлэгүүд',
         'annual-calendar': 'Жилийн хуанли',
         'competition-details': 'Тэмцээний дэлгэрэнгүй',
         'referee-profiles': 'Шүүгчдийн профайл',
@@ -161,6 +163,7 @@ export default function PageContent({ slug }: PageContentProps) {
   if (error) {
     return (
       <div className="min-h-screen">
+        <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -175,6 +178,7 @@ export default function PageContent({ slug }: PageContentProps) {
   if (!content) {
     return (
       <div className="min-h-screen">
+        <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
@@ -190,9 +194,10 @@ export default function PageContent({ slug }: PageContentProps) {
   if (slug === 'gallery-photos' || slug === 'gallery-videos') {
     return (
       <div className="min-h-screen">
+        <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
         <Breadcrumb items={generateBreadcrumbs(slug)} />
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-8xl mx-auto">
             <header className="mb-8 animate-fade-in">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
                 {content.title}
@@ -290,6 +295,7 @@ export default function PageContent({ slug }: PageContentProps) {
                     alt="PRESIDENT OF MIHF JAVKHLAN BOLD"
                     width={500}
                     height={700}
+                    unoptimized={true}
                     className="w-full h-auto rounded-lg shadow-lg"
                     priority
                   />

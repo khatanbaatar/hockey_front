@@ -130,7 +130,7 @@ export default function Header() {
               }`}
               title="Монгол хэл"
             >
-              <span className={`size-9 inline-flex items-center justify-center rounded-full border transition-all duration-300 font-semibold ${
+              <span className={`size-9 inline-flex text-sm items-center justify-center rounded-full border transition-all duration-300 font-bold ${
                 language === 'mn' 
                   ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg' 
                   : 'bg-gray-50 hover:bg-gray-100 border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800'
@@ -148,7 +148,7 @@ export default function Header() {
               }`}
               title="English"
             >
-              <span className={`size-9 inline-flex items-center justify-center rounded-full border transition-all duration-300 font-semibold ${
+              <span className={`size-9 inline-flex text-sm items-center justify-center rounded-full border transition-all duration-300 font-bold ${
                 language === 'en' 
                   ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg' 
                   : 'bg-gray-50 hover:bg-gray-100 border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800'
