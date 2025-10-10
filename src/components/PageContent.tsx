@@ -6,6 +6,7 @@ import { PageContent as PageContentType } from '@/types';
 import Breadcrumb from './Breadcrumb';
 import LoadingSpinner from './LoadingSpinner';
 import { useLanguage } from '@/contexts/LanguageContext';
+import Link from 'next/link';
 
 interface PageContentProps {
   slug: string;
@@ -16,6 +17,61 @@ export default function PageContent({ slug }: PageContentProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { language, t } = useLanguage();
+  
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImage, setCurrentImage] = useState<{ url: string; caption?: string } | null>(null);
+
+  // Lightbox functions
+  const openLightbox = (imageUrl: string, caption?: string, index?: number) => {
+    setCurrentImage({ url: imageUrl, caption });
+    if (index !== undefined) {
+      setCurrentImageIndex(index);
+    }
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setCurrentImage(null);
+  };
+
+  const nextImage = () => {
+    if (content?.media) {
+      const images = content.media.filter(media => media.type === 'image');
+      const nextIndex = (currentImageIndex + 1) % images.length;
+      setCurrentImageIndex(nextIndex);
+      setCurrentImage({ url: images[nextIndex].url, caption: images[nextIndex].caption });
+    }
+  };
+
+  const prevImage = () => {
+    if (content?.media) {
+      const images = content.media.filter(media => media.type === 'image');
+      const prevIndex = currentImageIndex === 0 ? images.length - 1 : currentImageIndex - 1;
+      setCurrentImageIndex(prevIndex);
+      setCurrentImage({ url: images[prevIndex].url, caption: images[prevIndex].caption });
+    }
+  };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (lightboxOpen) {
+        if (e.key === 'Escape') {
+          closeLightbox();
+        } else if (e.key === 'ArrowLeft') {
+          prevImage();
+        } else if (e.key === 'ArrowRight') {
+          nextImage();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [lightboxOpen, currentImageIndex]);
 
   useEffect(() => {
     const fetchPageContent = async () => {
@@ -194,43 +250,82 @@ export default function PageContent({ slug }: PageContentProps) {
   if (slug === 'gallery-photos' || slug === 'gallery-videos') {
     return (
       <div className="min-h-screen">
-        <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
-        <Breadcrumb items={generateBreadcrumbs(slug)} />
+        <section className="relative table w-full py-32 lg:py-40 bg-page-hero bg-no-repeat bg-center bg-cover">
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/80 to-slate-900"></div>
+            <div className="container relative">
+                <div className="grid grid-cols-1 pb-8 text-center mt-10">
+                    <h3 className="mb-3 text-3xl leading-normal font-medium text-white">{content.title}</h3>
+
+                    <p className="text-slate-300 text-lg max-w-xl mx-auto">{content.content}</p>
+                </div>
+            </div>
+            {/* <Breadcrumb items={generateBreadcrumbs(slug)} /> */}
+            {/* <div className="absolute text-center z-10 bottom-5 start-0 end-0 mx-3">
+                <ul className="tracking-[0.5px] mb-0 inline-block">
+                   <li className="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out text-white/50 hover:text-white"><a href="index.html">Techwind</a></li>
+                   <li className="inline-block text-base text-white/50 mx-0.5 ltr:rotate-0 rtl:rotate-180"><i className="uil uil-angle-right-b"></i></li>
+                   <li className="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out text-white/50 hover:text-white"><a href="">Portfolio</a></li>
+                    <li className="inline-block text-base text-white/50 mx-0.5 ltr:rotate-0 rtl:rotate-180"><i className="uil uil-angle-right-b"></i></li>
+                    <li className="inline-block uppercase text-[13px] font-bold duration-500 ease-in-out text-white" aria-current="page">Modern</li>
+                </ul>
+            </div> */}
+        </section>
+        <div className="relative">
+            <div className="shape absolute sm:-bottom-px -bottom-[2px] start-0 end-0 overflow-hidden z-1 text-white dark:text-slate-900">
+                <svg className="w-full h-auto scale-[2.0] origin-top" viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-8xl mx-auto">
-            <header className="mb-8 animate-fade-in">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                {content.title}
-              </h1>
-              <div className="prose prose-lg max-w-none">
-                <p className="text-gray-700 leading-relaxed text-lg">
-                  {content.content}
-                </p>
-              </div>
-            </header>
+          <div className="max-w-6xl mx-auto">
 
             {content.media && content.media.length > 0 && (
               <div className="animate-fade-in">
-                <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-6 lg:mb-8">
+                {/* <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-6 lg:mb-8">
                   {t('common.media-content')}
-                </h2>
+                </h2> */}
                 {/* 4x4 Grid Layout */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
                   {content.media.map((media, index) => (
                     <div 
                       key={index} 
                       className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
                     >
                       {media.type === 'image' ? (
-                        <div className="relative aspect-square">
-                          <Image
-                            src={media.url}
-                            alt={media.caption || 'Media content'}
-                            fill
-                            className="object-cover"
-                            loading="lazy"
-                          />
+                        <div className="group relative block overflow-hidden rounded-md duration-500">
+                        {/* <img src="assets/images/portfolio/1.jpg" className="group-hover:origin-center group-hover:scale-110 group-hover:rotate-3 duration-500" alt=""> */}
+                        <Image
+                          src={media.url}
+                          alt={media.caption || 'Media content'}
+                          width={400}
+                          height={224}
+                          className="w-full h-48 lg:h-56 object-cover"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-2 group-hover:bg-white/90 dark:group-hover:bg-slate-900/90 duration-500 z-0 rounded-md"></div>
+
+                        <div className="content duration-500">
+                            <div className="icon absolute z-10 opacity-0 group-hover:opacity-100 top-6 end-6 duration-500">
+                                <button 
+                                  onClick={() => {
+                                    const imageIndex = content?.media?.filter(m => m.type === 'image').findIndex(m => m.url === media.url) || 0;
+                                    openLightbox(media.url, media.caption, imageIndex);
+                                  }}
+                                  className="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center bg-indigo-600 hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 text-white rounded-full lightbox cursor-pointer"
+                                  aria-label="Open image in lightbox"
+                                >
+                                  <i className="uil uil-camera"></i>
+                                </button>
+                            </div>
+                            {media.caption && (
+                              <div className="absolute z-10 opacity-0 group-hover:opacity-100 bottom-6 start-6 duration-500">
+                              <a href="portfolio-detail-three.html" className="h6 text-lg font-medium hover:text-indigo-600 duration-500 ease-in-out">{media.caption}</a>
+                          </div>
+                      )}
                         </div>
+                    </div>
+                        
                       ) : (
                         <div className="relative aspect-square">
                           <video
@@ -241,11 +336,7 @@ export default function PageContent({ slug }: PageContentProps) {
                           />
                         </div>
                       )}
-                      {media.caption && (
-                        <div className="p-3">
-                          <p className="text-sm text-gray-600 font-medium line-clamp-2">{media.caption}</p>
-                        </div>
-                      )}
+                      
                     </div>
                   ))}
                 </div>
@@ -274,6 +365,81 @@ export default function PageContent({ slug }: PageContentProps) {
             )}
           </div>
         </div>
+        
+        {/* Lightbox Modal */}
+        {lightboxOpen && currentImage && (
+          <div 
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-95"
+            onClick={closeLightbox}
+          >
+            <div 
+              className="relative w-full h-full flex items-center justify-center p-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={closeLightbox}
+                className="absolute top-6 right-6 z-20 text-white hover:text-gray-300 transition-colors duration-200 bg-black bg-opacity-50 rounded-full p-2"
+                aria-label="Close lightbox"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* Navigation arrows */}
+              {content?.media && content.media.filter(m => m.type === 'image').length > 1 && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 text-white hover:text-gray-300 transition-colors duration-200 bg-black bg-opacity-50 rounded-full p-2"
+                    aria-label="Previous image"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 text-white hover:text-gray-300 transition-colors duration-200 bg-black bg-opacity-50 rounded-full p-2"
+                    aria-label="Next image"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </>
+              )}
+
+              {/* Image */}
+              <div className="relative w-full h-full flex items-center justify-center">
+                <Image
+                  src={currentImage.url}
+                  alt={currentImage.caption || 'Gallery image'}
+                  width={1920}
+                  height={1080}
+                  className="max-w-full max-h-full object-contain"
+                  priority
+                  style={{ maxHeight: '100vh' }}
+                />
+                
+                {/* Caption */}
+                {currentImage.caption && (
+                  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-75 text-white px-6 py-3 rounded-lg z-20">
+                    <p className="text-center text-lg whitespace-nowrap">{currentImage.caption}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Image counter */}
+              {content?.media && content.media.filter(m => m.type === 'image').length > 1 && (
+                <div className="absolute top-6 left-6 text-white text-sm bg-black bg-opacity-50 px-4 py-2 rounded-lg z-20">
+                  {currentImageIndex + 1} / {content.media.filter(m => m.type === 'image').length}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
