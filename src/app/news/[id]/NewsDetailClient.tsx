@@ -63,6 +63,7 @@ export default function NewsDetailClient({ newsId }: NewsDetailClientProps) {
   if (loading) {
     return (
       <div className="min-h-screen">
+        <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
         <Breadcrumb items={breadcrumbItems} />
         <div className="container mx-auto px-4 py-8">
           <LoadingSpinner size="lg" text={t('common.loading')} />
@@ -74,6 +75,7 @@ export default function NewsDetailClient({ newsId }: NewsDetailClientProps) {
   if (error || !newsItem) {
     return (
       <div className="min-h-screen">
+        <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
         <Breadcrumb items={breadcrumbItems} />
         <div className="container mx-auto px-4 py-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -93,6 +95,7 @@ export default function NewsDetailClient({ newsId }: NewsDetailClientProps) {
 
   return (
     <div className="min-h-screen">
+      <div className="pt-35 bg-gradient-to-r from-blue-900 to-blue-800 text-white"></div>
       <Breadcrumb items={breadcrumbItems} />
       
       <div className="container mx-auto px-4 py-8">

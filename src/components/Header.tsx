@@ -79,7 +79,7 @@ export default function Header() {
 
   if (loading) {
     return (
-      <nav className="defaultscroll is-sticky">
+      <nav id="topnav" className="defaultscroll is-sticky" >
         <div className="container relative">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-3">
