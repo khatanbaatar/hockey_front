@@ -7,6 +7,9 @@ import Breadcrumb from './Breadcrumb';
 import LoadingSpinner from './LoadingSpinner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
+import LeagueTable from './LeagueTable';
+import MasonryGallery from './MasonryGallery';
+import PlayersGrid from './PlayersGrid';
 
 interface PageContentProps {
   slug: string;
@@ -89,19 +92,34 @@ export default function PageContent({ slug }: PageContentProps) {
           // Add mock media data for gallery pages if no media exists
           if ((slug === 'gallery-photos' || slug === 'gallery-videos') && (!pageData.media || pageData.media.length === 0)) {
             const mediaType = slug === 'gallery-photos' ? 'image' : 'video';
-            const mediaCount = 16; // 4x4 grid
+            const mediaCount = 60; // More items for pagination testing
+            
+            // Hockey-related image categories for variety
+            const hockeyImageCategories = [
+              'sports', 'hockey', 'ice', 'team', 'player', 'game', 'stadium', 'equipment', 'training', 'match'
+            ];
+            
+            const hockeyVideoCategories = [
+              'hockey-game', 'training', 'match', 'celebration', 'highlights', 'interviews'
+            ];
             
             pageData = {
               ...pageData,
-              media: Array.from({ length: mediaCount }, (_, index) => ({
-                type: mediaType,
-                url: mediaType === 'image' 
-                  ? `https://picsum.photos/400/400?random=${index + 1}` 
-                  : `https://sample-videos.com/zip/10/mp4/SampleVideo_${(index % 3) + 1}.mp4`,
-                caption: language === 'mn' 
-                  ? `${mediaType === 'image' ? 'Зураг' : 'Бичлэг'} ${index + 1}` 
-                  : `${mediaType === 'image' ? 'Photo' : 'Video'} ${index + 1}`
-              }))
+              media: Array.from({ length: mediaCount }, (_, index) => {
+                const category = mediaType === 'image' 
+                  ? hockeyImageCategories[index % hockeyImageCategories.length]
+                  : hockeyVideoCategories[index % hockeyVideoCategories.length];
+                
+                return {
+                  type: mediaType,
+                  url: mediaType === 'image' 
+                    ? `https://picsum.photos/400/600?random=${index + 100}&category=${category}` 
+                    : `https://sample-videos.com/zip/10/mp4/SampleVideo_${(index % 6) + 1}.mp4`,
+                  caption: language === 'mn' 
+                    ? `${mediaType === 'image' ? 'Хоккейн зураг' : 'Хоккейн бичлэг'} ${index + 1}` 
+                    : `Hockey ${mediaType} ${index + 1}`
+                };
+              })
             };
           }
           
@@ -246,6 +264,72 @@ export default function PageContent({ slug }: PageContentProps) {
     );
   }
 
+  // Special layout for competition results (league table)
+  if (slug === 'statistics-competition-results') {
+    return (
+      <div className="min-h-screen">
+        <section className="relative table w-full py-32 lg:py-40 bg-page-hero bg-no-repeat bg-center bg-cover">
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/80 to-slate-900"></div>
+            <div className="container relative">
+                <div className="grid grid-cols-1 pb-8 text-center mt-10">
+                    <h3 className="mb-3 text-3xl leading-normal font-medium text-white">
+                      {content?.title || (language === 'mn' ? 'Тэмцээний үр дүн' : 'Competition Results')}
+                    </h3>
+                    <p className="text-slate-300 text-lg max-w-xl mx-auto">
+                      {content?.content || (language === 'mn' ? 'Хоккейн тэмцээний үр дүн, оноо, байр' : 'Hockey competition results, scores and standings')}
+                    </p>
+                </div>
+            </div>
+        </section>
+        <div className="relative">
+            <div className="shape absolute sm:-bottom-px -bottom-[2px] start-0 end-0 overflow-hidden z-1 text-white dark:text-slate-900">
+                <svg className="w-full h-auto scale-[2.0] origin-top" viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <LeagueTable competitions={content?.competitions} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Special layout for team player stats (players grid)
+  if (slug === 'statistics-team-player-stats') {
+    return (
+      <div className="min-h-screen">
+        <section className="relative table w-full py-32 lg:py-40 bg-page-hero bg-no-repeat bg-center bg-cover">
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/80 to-slate-900"></div>
+            <div className="container relative">
+                <div className="grid grid-cols-1 pb-8 text-center mt-10">
+                    <h3 className="mb-3 text-3xl leading-normal font-medium text-white">
+                      {content?.title || (language === 'mn' ? 'Баг, тоглогчдын статистик' : 'Team & Player Statistics')}
+                    </h3>
+                    <p className="text-slate-300 text-lg max-w-xl mx-auto">
+                      {content?.content || (language === 'mn' ? 'Хоккейн баг, тоглогчдын мэдээлэл, статистик' : 'Hockey team and player information, statistics')}
+                    </p>
+                </div>
+            </div>
+        </section>
+        <div className="relative">
+            <div className="shape absolute sm:-bottom-px -bottom-[2px] start-0 end-0 overflow-hidden z-1 text-white dark:text-slate-900">
+                <svg className="w-full h-auto scale-[2.0] origin-top" viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-7xl mx-auto">
+            <PlayersGrid players={content?.players} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Special layout for gallery pages (photos and videos)
   if (slug === 'gallery-photos' || slug === 'gallery-videos') {
     return (
@@ -278,68 +362,14 @@ export default function PageContent({ slug }: PageContentProps) {
             </div>
         </div>
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-6xl mx-auto">
-
+          <div className="max-w-7xl mx-auto">
             {content.media && content.media.length > 0 && (
               <div className="animate-fade-in">
-                {/* <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-6 lg:mb-8">
-                  {t('common.media-content')}
-                </h2> */}
-                {/* 4x4 Grid Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-                  {content.media.map((media, index) => (
-                    <div 
-                      key={index} 
-                      className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                    >
-                      {media.type === 'image' ? (
-                        <div className="group relative block overflow-hidden rounded-md duration-500">
-                        {/* <img src="assets/images/portfolio/1.jpg" className="group-hover:origin-center group-hover:scale-110 group-hover:rotate-3 duration-500" alt=""> */}
-                        <Image
-                          src={media.url}
-                          alt={media.caption || 'Media content'}
-                          width={400}
-                          height={224}
-                          className="w-full h-48 lg:h-56 object-cover"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-2 group-hover:bg-white/90 dark:group-hover:bg-slate-900/90 duration-500 z-0 rounded-md"></div>
-
-                        <div className="content duration-500">
-                            <div className="icon absolute z-10 opacity-0 group-hover:opacity-100 top-6 end-6 duration-500">
-                                <button 
-                                  onClick={() => {
-                                    const imageIndex = content?.media?.filter(m => m.type === 'image').findIndex(m => m.url === media.url) || 0;
-                                    openLightbox(media.url, media.caption, imageIndex);
-                                  }}
-                                  className="size-9 inline-flex items-center justify-center tracking-wide align-middle duration-500 text-center bg-indigo-600 hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 text-white rounded-full lightbox cursor-pointer"
-                                  aria-label="Open image in lightbox"
-                                >
-                                  <i className="uil uil-camera"></i>
-                                </button>
-                            </div>
-                            {media.caption && (
-                              <div className="absolute z-10 opacity-0 group-hover:opacity-100 bottom-6 start-6 duration-500">
-                              <a href="portfolio-detail-three.html" className="h6 text-lg font-medium hover:text-indigo-600 duration-500 ease-in-out">{media.caption}</a>
-                          </div>
-                      )}
-                        </div>
-                    </div>
-                        
-                      ) : (
-                        <div className="relative aspect-square">
-                          <video
-                            src={media.url}
-                            controls
-                            className="w-full h-full object-cover"
-                            preload="metadata"
-                          />
-                        </div>
-                      )}
-                      
-                    </div>
-                  ))}
-                </div>
+                {/* Masonry Gallery Layout */}
+                <MasonryGallery 
+                  media={content.media} 
+                  onImageClick={openLightbox}
+                />
               </div>
             )}
 

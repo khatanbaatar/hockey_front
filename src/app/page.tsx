@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ImageCarousel from '@/components/ImageCarousel';
+import HomeMasonryGallery from '@/components/HomeMasonryGallery';
 
 interface NewsItem {
   id: string;
@@ -14,10 +15,18 @@ interface NewsItem {
   category: string;
 }
 
+interface GalleryItem {
+  type: 'image' | 'video';
+  url: string;
+  caption?: string;
+}
+
 export default function Home() {
   const { language, t } = useLanguage();
   const [latestNews, setLatestNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
+  const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
 
   useEffect(() => {
     const fetchLatestNews = async () => {
@@ -38,6 +47,51 @@ export default function Home() {
     };
 
     fetchLatestNews();
+  }, [language]);
+
+  useEffect(() => {
+    const fetchGalleryImages = async () => {
+      try {
+        setGalleryLoading(true);
+        const api = "https://hockey.onol.tech";
+        const response = await fetch(`${api}/api/page/gallery-photos?language=${language}`);
+        const data = await response.json();
+        
+        if (data.success && data.data.media && data.data.media.length > 0) {
+          // Take first 10 images from gallery
+          const images = data.data.media
+            .filter((item: any) => item.type === 'image')
+            .slice(0, 10)
+            .map((item: any) => ({
+              type: item.type,
+              url: item.url,
+              caption: item.caption
+            }));
+          setGalleryImages(images);
+        } else {
+          // Fallback mock data if API fails
+          const mockImages = Array.from({ length: 10 }, (_, index) => ({
+            type: 'image' as const,
+            url: `https://picsum.photos/400/600?random=${index + 200}&category=sports`,
+            caption: language === 'mn' ? `Хоккейн зураг ${index + 1}` : `Hockey Photo ${index + 1}`
+          }));
+          setGalleryImages(mockImages);
+        }
+      } catch (error) {
+        console.error('Error fetching gallery images:', error);
+        // Fallback mock data on error
+        const mockImages = Array.from({ length: 10 }, (_, index) => ({
+          type: 'image' as const,
+          url: `https://picsum.photos/400/600?random=${index + 200}&category=sports`,
+          caption: language === 'mn' ? `Хоккейн зураг ${index + 1}` : `Hockey Photo ${index + 1}`
+        }));
+        setGalleryImages(mockImages);
+      } finally {
+        setGalleryLoading(false);
+      }
+    };
+
+    fetchGalleryImages();
   }, [language]);
   
 
@@ -184,6 +238,46 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Gallery Masonry Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {language === 'mn' ? 'Зургийн цуглуулга' : 'Photo Gallery'}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {language === 'mn' 
+                ? 'Монголын хоккейн холбооны сүүлийн үеийн зургууд' 
+                : 'Latest photos from Mongolian Hockey Federation'
+              }
+            </p>
+          </div>
+          
+          {galleryLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-gray-200 rounded-lg animate-pulse" style={{ height: `${200 + (i * 50)}px` }}></div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <HomeMasonryGallery media={galleryImages} />
+              
+              {/* View All Gallery Button */}
+              <div className="text-center mt-12">
+                <Link 
+                  href="/gallery-photos" 
+                  className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200"
+                >
+                  {language === 'mn' ? 'Бүх зураг харах' : 'View All Photos'}
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
       <section className="py-12 bg-white">
         <div className="flex justify-center">
           <div className="block md:hidden">

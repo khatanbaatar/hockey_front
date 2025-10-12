@@ -994,3 +994,81 @@
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important;
 }
+
+/* Masonry Gallery Styles - CSS Columns Approach */
+.masonry-gallery-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.masonry-gallery-container .masonry-columns {
+  column-fill: balance;
+  break-inside: avoid;
+}
+
+/* Responsive column counts */
+@media (max-width: 767px) {
+  .masonry-gallery-container .masonry-columns {
+    column-count: 1 !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .masonry-gallery-container .masonry-columns {
+    column-count: 2 !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .masonry-gallery-container .masonry-columns {
+    column-count: 3 !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry-gallery-container .masonry-columns {
+    column-count: 4 !important;
+  }
+}
+
+/* Ensure items don't break across columns */
+.masonry-gallery-container .break-inside-avoid {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Home Masonry Gallery Styles - CSS Columns Approach */
+.home-masonry-gallery {
+  width: 100%;
+  max-width: 100%;
+}
+
+.home-masonry-gallery .masonry-columns {
+  column-fill: balance;
+  break-inside: avoid;
+}
+
+/* Responsive column counts for homepage (max 3 columns) */
+@media (max-width: 767px) {
+  .home-masonry-gallery .masonry-columns {
+    column-count: 1 !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-masonry-gallery .masonry-columns {
+    column-count: 2 !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-masonry-gallery .masonry-columns {
+    column-count: 3 !important;
+  }
+}
+
+/* Ensure items don't break across columns */
+.home-masonry-gallery .break-inside-avoid {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
