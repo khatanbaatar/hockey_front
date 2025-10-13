@@ -280,7 +280,7 @@ export async function GET(
   try {
     const { slug } = await params;
     const { searchParams } = new URL(request.url);
-    const language = searchParams.get('language') || 'mn';
+    // const language = searchParams.get('language') || 'mn'; // Currently not used
 
     // Check if we have data for this slug
     const pageData = teamPlayerStatsData[slug];

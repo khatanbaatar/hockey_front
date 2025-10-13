@@ -1,6 +1,7 @@
 'use client';
 
 import { Player } from '@/types';
+import Image from 'next/image';
 
 interface PlayersGridProps {
   players?: Player[];
@@ -308,10 +309,13 @@ const PlayersGrid = ({ players: propPlayers }: PlayersGridProps) => {
           >
             {/* Player Photo */}
             <div className="aspect-[3/4] overflow-hidden">
-              <img
+              <Image
                 src={player.photo}
                 alt={player.name}
+                width={300}
+                height={400}
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
             
