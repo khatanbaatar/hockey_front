@@ -60,9 +60,9 @@ export default function Home() {
         if (data.success && data.data.media && data.data.media.length > 0) {
           // Take first 10 images from gallery
           const images = data.data.media
-            .filter((item: any) => item.type === 'image')
+            .filter((item: { type: string; url: string; caption?: string }) => item.type === 'image')
             .slice(0, 10)
-            .map((item: any) => ({
+            .map((item: { type: string; url: string; caption?: string }) => ({
               type: item.type,
               url: item.url,
               caption: item.caption

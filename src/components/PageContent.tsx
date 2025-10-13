@@ -6,7 +6,6 @@ import { PageContent as PageContentType } from '@/types';
 import Breadcrumb from './Breadcrumb';
 import LoadingSpinner from './LoadingSpinner';
 import { useLanguage } from '@/contexts/LanguageContext';
-import Link from 'next/link';
 import LeagueTable from './LeagueTable';
 import MasonryGallery from './MasonryGallery';
 import PlayersGrid from './PlayersGrid';
@@ -74,7 +73,7 @@ export default function PageContent({ slug }: PageContentProps) {
 
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
-  }, [lightboxOpen, currentImageIndex]);
+  }, [lightboxOpen, nextImage, prevImage, closeLightbox]);
 
   useEffect(() => {
     const fetchPageContent = async () => {
