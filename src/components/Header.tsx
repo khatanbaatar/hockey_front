@@ -21,26 +21,40 @@ export default function Header() {
 
   // Helper functions for mega menu mouse events
   const handleMenuMouseEnter = (item: MenuItem) => {
+    console.log('Menu mouse enter:', item.name);
+    // Clear any existing timeout
     if (megaMenuTimeout) {
       clearTimeout(megaMenuTimeout);
       setMegaMenuTimeout(null);
     }
     
+    // Only show mega menu for items with sub-items
     if (item.subItems && item.subItems.length > 0) {
+      console.log('Opening mega menu for:', item.name);
       setIsMegaMenuOpen(true);
       setActiveMenuId(item.id);
     }
   };
 
   const handleMenuMouseLeave = () => {
+    console.log('Menu mouse leave');
+    // Clear any existing timeout
+    if (megaMenuTimeout) {
+      clearTimeout(megaMenuTimeout);
+    }
+    
+    // Set a timeout to close the mega menu
     const timeout = setTimeout(() => {
+      console.log('Closing mega menu due to timeout');
       setIsMegaMenuOpen(false);
       setActiveMenuId(null);
-    }, 150); // Small delay to allow moving to mega menu
+    }, 300);
     setMegaMenuTimeout(timeout);
   };
 
   const handleMegaMenuMouseEnter = () => {
+    console.log('Mega menu mouse enter');
+    // Clear any existing timeout when entering mega menu
     if (megaMenuTimeout) {
       clearTimeout(megaMenuTimeout);
       setMegaMenuTimeout(null);
@@ -48,10 +62,18 @@ export default function Header() {
   };
 
   const handleMegaMenuMouseLeave = () => {
+    console.log('Mega menu mouse leave');
+    // Clear any existing timeout
+    if (megaMenuTimeout) {
+      clearTimeout(megaMenuTimeout);
+    }
+    
+    // Set a timeout to close the mega menu
     const timeout = setTimeout(() => {
+      console.log('Closing mega menu due to timeout');
       setIsMegaMenuOpen(false);
       setActiveMenuId(null);
-    }, 150);
+    }, 200);
     setMegaMenuTimeout(timeout);
   };
 
@@ -220,14 +242,17 @@ export default function Header() {
           </li>
         </ul>
 
-        <div id="navigation" className="relative">
+        <div 
+          id="navigation" 
+          className="relative"
+          onMouseLeave={handleMenuMouseLeave}
+        >
           <ul className="navigation-menu nav-light">
             {menuItems.map((item) => (
               <li
                 key={item.id}
                 className="relative"
                 onMouseEnter={() => handleMenuMouseEnter(item)}
-                onMouseLeave={handleMenuMouseLeave}
               >
                 {item.subItems && item.subItems.length > 0 ? (
                   <a className="sub-menu-item cursor-pointer">
