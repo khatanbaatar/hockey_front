@@ -155,7 +155,7 @@ export default function Header() {
     <nav id="topnav" className="defaultscroll is-sticky">
       <div className="container relative">
         {/* Logo */}
-        <Link href="/" className="logo">
+        <Link href="/" className="logo relative z-10">
           <Image
             src="/assets/logo.webp"
             alt="Монголын хоккейн холбоо"
@@ -170,11 +170,15 @@ export default function Header() {
             </span> */}
         </Link>
 
-        <ul className="buy-button list-none mb-0">
+        <ul className="buy-button list-none mb-0 relative z-10">
           <li className="inline mb-0">
             <button
               type="button"
-              onClick={() => { setLanguage('mn'); setIsMegaMenuOpen(false); }}
+              onClick={() => { 
+                console.log('Switching to Mongolian'); 
+                setLanguage('mn'); 
+                setIsMegaMenuOpen(false); 
+              }}
               className={`cursor-pointer transition-all duration-300 ${
                 language === 'mn' ? 'opacity-100' : 'opacity-60 hover:opacity-80'
               }`}
@@ -194,7 +198,11 @@ export default function Header() {
           <li className="inline ps-2 mb-0">
             <button
               type="button"
-              onClick={() => { setLanguage('en'); setIsMegaMenuOpen(false); }}
+              onClick={() => { 
+                console.log('Switching to English'); 
+                setLanguage('en'); 
+                setIsMegaMenuOpen(false); 
+              }}
               className={`cursor-pointer transition-all duration-300 ${
                 language === 'en' ? 'opacity-100' : 'opacity-60 hover:opacity-80'
               }`}
