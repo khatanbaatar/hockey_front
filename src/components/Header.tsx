@@ -6,14 +6,63 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { MenuItem } from "@/types";
 import { useLanguage } from "@/contexts/LanguageContext";
+import MegaMenu from './MegaMenu';
 // import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+  const [megaMenuTimeout, setMegaMenuTimeout] = useState<NodeJS.Timeout | null>(null);
   const [loading, setLoading] = useState(true);
   const { language, setLanguage } = useLanguage();
   const pathname = usePathname();
+
+  // Helper functions for mega menu mouse events
+  const handleMenuMouseEnter = (item: MenuItem) => {
+    if (megaMenuTimeout) {
+      clearTimeout(megaMenuTimeout);
+      setMegaMenuTimeout(null);
+    }
+    
+    if (item.subItems && item.subItems.length > 0) {
+      setIsMegaMenuOpen(true);
+      setActiveMenuId(item.id);
+    }
+  };
+
+  const handleMenuMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsMegaMenuOpen(false);
+      setActiveMenuId(null);
+    }, 150); // Small delay to allow moving to mega menu
+    setMegaMenuTimeout(timeout);
+  };
+
+  const handleMegaMenuMouseEnter = () => {
+    if (megaMenuTimeout) {
+      clearTimeout(megaMenuTimeout);
+      setMegaMenuTimeout(null);
+    }
+  };
+
+  const handleMegaMenuMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsMegaMenuOpen(false);
+      setActiveMenuId(null);
+    }, 150);
+    setMegaMenuTimeout(timeout);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (megaMenuTimeout) {
+        clearTimeout(megaMenuTimeout);
+      }
+    };
+  }, [megaMenuTimeout]);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -123,56 +172,57 @@ export default function Header() {
 
         <ul className="buy-button list-none mb-0">
           <li className="inline mb-0">
-            <a 
-              onClick={() => setLanguage("mn")}
+            <button
+              type="button"
+              onClick={() => { setLanguage('mn'); setIsMegaMenuOpen(false); }}
               className={`cursor-pointer transition-all duration-300 ${
                 language === 'mn' ? 'opacity-100' : 'opacity-60 hover:opacity-80'
               }`}
               title="Монгол хэл"
+              aria-label="Switch to Mongolian"
             >
               <span className={`size-9 inline-flex text-sm items-center justify-center rounded-full border transition-all duration-300 font-bold ${
-                language === 'mn' 
-                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg' 
+                language === 'mn'
+                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg'
                   : 'bg-gray-50 hover:bg-gray-100 border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800'
               }`}>
                 MN
               </span>
-            </a>
+            </button>
           </li>
 
           <li className="inline ps-2 mb-0">
-            <a 
-              onClick={() => setLanguage("en")}
+            <button
+              type="button"
+              onClick={() => { setLanguage('en'); setIsMegaMenuOpen(false); }}
               className={`cursor-pointer transition-all duration-300 ${
                 language === 'en' ? 'opacity-100' : 'opacity-60 hover:opacity-80'
               }`}
               title="English"
+              aria-label="Switch to English"
             >
               <span className={`size-9 inline-flex text-sm items-center justify-center rounded-full border transition-all duration-300 font-bold ${
-                language === 'en' 
-                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg' 
+                language === 'en'
+                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg'
                   : 'bg-gray-50 hover:bg-gray-100 border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800'
               }`}>
                 EN
               </span>
-            </a>
+            </button>
           </li>
         </ul>
 
-        <div id="navigation">
+        <div id="navigation" className="relative">
           <ul className="navigation-menu nav-light">
             {menuItems.map((item) => (
               <li
                 key={item.id}
-                // Custom CSS-ийн классуудыг нэмнэ
-                className={`${item.subItems && item.subItems.length > 0
-                    ? "has-submenu parent-parent-menu-item"
-                    : ""
-                  }`}
+                className="relative"
+                onMouseEnter={() => handleMenuMouseEnter(item)}
+                onMouseLeave={handleMenuMouseLeave}
               >
-                {/* Үндсэн цэсний линк / span */}
                 {item.subItems && item.subItems.length > 0 ? (
-                  <a className="sub-menu-item">
+                  <a className="sub-menu-item cursor-pointer">
                     {item.name}
                     <span className="menu-arrow"></span>
                   </a>
@@ -185,33 +235,21 @@ export default function Header() {
                     {item.name}
                   </Link>
                 )}
-
-                {/* Submenu (Энгийн Dropdown) */}
-                {item.subItems && item.subItems.length > 0 && (
-                  // 🚨 Зөвхөн "submenu" классыг үлдээснээр энгийн dropdown үүснэ.
-                  <ul className="submenu">
-                    {item.subItems.map((subItem) => (
-                      <li key={subItem.id}>
-                        <Link
-                          href={`/${item.slug}/${subItem.slug}`}
-                          className="sub-menu-item"
-                          onClick={() => setIsMenuOpen(false)} // Mobile-д зориулж нэмлээ
-                        >
-                          {subItem.name}
-                          {/* Таны Custom Tag/Badge-ийг харуулна (API-аас ирдэг бол) */}
-                          {/* {subItem.tag && ( 
-                            <span className="bg-red-500 inline-block text-white text-[10px] font-bold px-2.5 py-0.5 rounded h-5 ms-1">
-                                {subItem.tag}
-                            </span>
-                          )} */}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </li>
             ))}
           </ul>
+          
+          {/* Mega Menu */}
+          <MegaMenu
+            menuItems={menuItems}
+            isOpen={isMegaMenuOpen}
+            onClose={() => {
+              setIsMegaMenuOpen(false);
+              setActiveMenuId(null);
+            }}
+            onMouseEnter={handleMegaMenuMouseEnter}
+            onMouseLeave={handleMegaMenuMouseLeave}
+          />
         </div>
 
         <div className="flex items-center space-x-4">

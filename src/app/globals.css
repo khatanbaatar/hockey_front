@@ -1072,3 +1072,77 @@
   break-inside: avoid;
   page-break-inside: avoid;
 }
+
+/* Mega Menu Styles */
+.mega-menu {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease-in-out;
+  transition-delay: 0.1s;
+}
+
+.mega-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.mega-menu-column {
+  min-width: 200px;
+}
+
+.mega-menu-column h3 {
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.mega-menu-column ul li a {
+  display: block;
+  color: #374151;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+.mega-menu-column ul li a:hover {
+  color: #4f46e5;
+}
+
+/* Navigation hover effects */
+.navigation-menu li:hover .sub-menu-item {
+  color: #4f46e5;
+}
+
+.navigation-menu li .menu-arrow {
+  transition: transform 0.2s ease;
+}
+
+.navigation-menu li:hover .menu-arrow {
+  transform: rotate(180deg);
+}
+
+/* Ensure no gap between navigation and mega menu */
+#navigation {
+  position: relative;
+}
+
+.mega-menu {
+  margin-top: 0;
+  top: 100%;
+}
+
+/* Add a small invisible bridge to prevent mouse leave */
+.mega-menu::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: transparent;
+}
