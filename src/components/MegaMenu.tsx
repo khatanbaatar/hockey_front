@@ -67,7 +67,8 @@ const MegaMenu = ({ menuItems, isOpen, onClose, onMouseEnter, onMouseLeave }: Me
   useEffect(() => {
     const fetchMegaMenuData = async () => {
       try {
-        const response = await fetch(`/api/mega-menu?language=${language}`);
+        const api = "https://hockey.onol.tech";
+        const response = await fetch(api + `/api/mega-menu?language=${language}`);
         const data = await response.json();
         
         if (data.success) {
