@@ -251,7 +251,7 @@ export default function Header() {
             {menuItems.map((item) => (
               <li
                 key={item.id}
-                className="relative"
+                className={`relative ${item.subItems && item.subItems.length > 0 ? 'has-submenu' : ''} ${isActive(item) ? 'active' : ''}`}
                 onMouseEnter={() => handleMenuMouseEnter(item)}
               >
                 {item.subItems && item.subItems.length > 0 ? (
