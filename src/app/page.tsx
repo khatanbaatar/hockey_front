@@ -102,32 +102,32 @@ export default function Home() {
             <ImageCarousel 
               images={[
                 {
-                  src: "https://mihf.mn/sliders/001.jpeg?w=1200&q=75",
+                  src: "/assets/001.jpeg",
                   alt: language === 'mn' ? 'Хоккейн тэмцээн' : 'Hockey Match',
                   caption: language === 'mn' ? 'Хоккейн тэмцээний агшин' : 'Hockey Match Moment'
                 },
                 {
-                  src: "https://mihf.mn/bg/bg-o3.jpeg",
+                  src: "/assets/7.jpeg",
                   alt: language === 'mn' ? 'Хоккейн талбай' : 'Hockey Rink',
                   caption: language === 'mn' ? 'Хоккейн талбай дээрх тоглолт' : 'Game on Hockey Rink'
                 },
                 {
-                  src: "https://mihf.mn/bg/bg-04.jpeg",
+                  src: "/assets/2.jpeg",
                   alt: language === 'mn' ? 'Хоккейн баг' : 'Hockey Team',
                   caption: language === 'mn' ? 'Хоккейн багийн бүрэлдэхүүн' : 'Hockey Team Lineup'
                 },
-                {
-                  src: "https://mihf.mn/sliders/002.jpeg?w=1200&q=75",
-                  alt: language === 'mn' ? 'Хоккейн тэмцээн' : 'Hockey Competition',
-                  caption: language === 'mn' ? 'Үндэсний тэмцээн' : 'National Competition'
-                }
+                // {
+                //   src: "/assets/001.jpeg",
+                //   alt: language === 'mn' ? 'Хоккейн тэмцээн' : 'Hockey Competition',
+                //   caption: language === 'mn' ? 'Үндэсний тэмцээн' : 'National Competition'
+                // }
               ]}
               autoPlay={true}
               interval={5000}
             />
           </div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
+      {/* <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             {t('home.title')}
@@ -150,7 +150,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Banner Section */}
       <section>
